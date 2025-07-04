@@ -1,0 +1,9 @@
+@reference "tailwindcss";
+
+.button {
+  @apply w-full h-[2.8rem] px-[0.8rem] font-bold rounded-[0.625rem] bg-left disabled:bg-right disabled:opacity-70 truncate;
+
+  background: linear-gradient(90deg, #0198ea 0%, #14ccfa 50%, #777777 50%, #999999 100%);
+  background-size: 210% 110%;
+  transition: background-position 0.5s ease, opacity 0.3s ease, scale 0.2s;
+}

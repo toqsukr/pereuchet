@@ -1,0 +1,20 @@
+.flip_button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  transform-origin: left;
+  backface-visibility: hidden;
+  transform: rotate3d(0, 1, 0, 180deg) translate(-50%, -50%);
+  transition: transform 0.6s, opacity 0.6s;
+
+  &.active {
+    opacity: 1;
+    transform: rotate3d(0, 0, 0, 0deg) translate(-50%, -50%);
+  }
+
+  &.hidden {
+    opacity: 0;
+    transform: rotate3d(0, 1, 0, 180deg) translate(-50%, -50%);
+  }
+}

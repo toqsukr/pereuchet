@@ -1,0 +1,30 @@
+.select {
+  width: 100%;
+  height: 2.8rem;
+  padding: 0.8rem;
+  font-weight: bold;
+  border-radius: 0.625rem;
+  color: var(--text-primary-color);
+  background-color: var(--background-color);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &::placeholder {
+    color: var(--text-third-color);
+  }
+  &::picker-icon {
+    color: white;
+    margin-right: 2px;
+    content: url('/arrow.svg');
+    transition: transform 0.4s;
+  }
+  &:open {
+    &::picker-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  appearance: base-select;
+}
