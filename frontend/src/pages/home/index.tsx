@@ -1,41 +1,49 @@
 import { useProducts } from '@entities/product'
 import { useWorkers } from '@entities/worker'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { RecordSchemaDTO } from '@shared/api/record'
 import Button from '@shared/uikit/button/button'
 import ContentField from '@shared/uikit/content-field'
 import Input from '@shared/uikit/input'
 import Select from '@shared/uikit/select/select'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-
-const recordSchema = z.object({
-  workerID: z.string().min(1),
-  productID: z.string().min(1),
-  amount: z.coerce.number().positive().max(5000),
-})
+import { useSaveRecord } from './model/use-save-record'
 
 const HomePage = () => {
   const { data: workers } = useWorkers()
   const { data: products } = useProducts()
-  const { control, formState, handleSubmit } = useForm({
+  const { mutateAsync: saveRecord } = useSaveRecord()
+  const { control, formState, reset, handleSubmit } = useForm({
     mode: 'onChange',
-    resolver: zodResolver(recordSchema),
+    defaultValues: {
+      amount: undefined,
+      productCode: undefined,
+      workerID: undefined,
+    },
+    resolver: zodResolver(RecordSchemaDTO),
   })
 
-  const handleSaveProduct = (data: z.infer<typeof recordSchema>) => {
-    console.log(data)
+  const handleSaveProduct = async (data: z.infer<typeof RecordSchemaDTO>) => {
+    try {
+      await saveRecord(data)
+      alert('Saved success!')
+      reset()
+    } catch (e) {
+      alert('Saving error!')
+    }
   }
 
   return (
-    <div className='h-full max-w-[576px] min-w-[285px] p-8 mx-auto'>
+    <div className='w-full max-w-[576px] min-w-[285px] p-8 mx-auto fixed top-1/3 left-1/2 -translate-1/2'>
       <ContentField title={'Добавление продукта'}>
         <form onSubmit={e => e.preventDefault()} className='flex flex-col gap-4'>
           <Controller
             name='workerID'
             control={control}
             render={({ field }) => (
-              <Select {...field}>
-                <Select.Option value=''>Выберите ваш ID</Select.Option>
+              <Select {...field} value={field.value ?? ''}>
+                <Select.Option value={''}>Выберите ваш ID</Select.Option>
                 {workers?.map(({ id }) => (
                   <Select.Option key={id} value={id}>
                     {id}
@@ -45,13 +53,13 @@ const HomePage = () => {
             )}
           />
           <Controller
-            name='productID'
+            name='productCode'
             control={control}
             render={({ field }) => (
-              <Select {...field}>
-                <Select.Option value=''>Выберите продукт</Select.Option>
-                {products?.map(({ name, value }) => (
-                  <Select.Option key={value} value={value}>
+              <Select {...field} value={field.value ?? ''}>
+                <Select.Option value={''}>Выберите продукт</Select.Option>
+                {products?.map(({ name, code }) => (
+                  <Select.Option key={code} value={code}>
                     {name}
                   </Select.Option>
                 ))}
@@ -61,7 +69,14 @@ const HomePage = () => {
           <Controller
             name='amount'
             control={control}
-            render={({ field }) => <Input {...field} placeholder='Количество коробок' type='tel' />}
+            render={({ field }) => (
+              <Input
+                {...field}
+                value={field.value ?? ''}
+                placeholder='Количество коробок'
+                type='tel'
+              />
+            )}
           />
           <Button onClick={handleSubmit(handleSaveProduct)} disabled={!formState.isValid}>
             Сохранить

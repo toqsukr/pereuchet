@@ -2,8 +2,8 @@ import { z } from 'zod'
 import baseTemplate from './axios-template'
 
 const ProductSchema = z.object({
+  code: z.string().min(1),
   name: z.string(),
-  value: z.string().min(1),
 })
 
 export const productService = {
