@@ -2,7 +2,7 @@ FROM node:22
 
 WORKDIR /app
 
-COPY prisma/ /app/prisma/
+COPY ./backend/prisma /app/prisma/
 
 COPY ./backend/package*.json ./
 
