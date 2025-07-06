@@ -2,6 +2,8 @@ FROM node:22
 
 WORKDIR /app
 
+COPY prisma/ /app/prisma/
+
 COPY ./backend/package*.json ./
 
 RUN apt-get update && apt-get upgrade -y && apt-get -qy install openssl
