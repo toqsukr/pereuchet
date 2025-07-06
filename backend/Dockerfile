@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY ./backend/package*.json ./
 
+RUN apt-get update && apt-get upgrade -y && apt-get -qy install openssl
+
 RUN npm install
 
 COPY ./backend .
