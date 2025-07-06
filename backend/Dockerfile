@@ -8,8 +8,7 @@ RUN npm install
 
 COPY backend .
 
-RUN npx prisma generate && \
-    npm run build
+RUN npm run build
 
 FROM node:22-alpine
 
