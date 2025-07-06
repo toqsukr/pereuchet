@@ -14,7 +14,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://10.84.10.46:5173'],
+    origin: ['http://localhost:5173', 'http://10.84.10.84:5173'],
   });
 
   app.useGlobalPipes(
