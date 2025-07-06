@@ -4,11 +4,14 @@ WORKDIR /app
 
 COPY backend/package.json backend/package-lock.json* ./
 
-RUN npm install
+RUN npm install -g npm@latest && \
+    npm install -g prisma && \
+    npm ci --legacy-peer-deps --unsafe-perm
 
 COPY backend .
 
-RUN npm run build
+RUN npx prisma generate --engine-type binary && \
+    npm run build
 
 FROM node:22-alpine
 
