@@ -14,7 +14,7 @@ const HomePage = () => {
   const { data: workers } = useWorkers()
   const { data: products } = useProducts()
   const { mutateAsync: saveRecord } = useSaveRecord()
-  const { control, formState, reset, handleSubmit } = useForm({
+  const { control, formState, resetField, handleSubmit } = useForm({
     mode: 'onChange',
     defaultValues: {
       amount: undefined,
@@ -27,8 +27,8 @@ const HomePage = () => {
   const handleSaveProduct = async (data: z.infer<typeof RecordSchemaDTO>) => {
     try {
       await saveRecord(data)
-      alert('Saved success!')
-      reset()
+      resetField('amount')
+      resetField('productCode')
     } catch (e) {
       alert('Saving error!')
     }

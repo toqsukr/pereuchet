@@ -4,7 +4,7 @@ import baseTemplate from './axios-template'
 export const RecordSchemaDTO = z.object({
   workerID: z.coerce.number().min(1),
   productCode: z.string().min(1),
-  amount: z.coerce.number().positive().max(5000),
+  amount: z.coerce.number().positive().int().max(5000),
 })
 
 type RecordDTO = z.infer<typeof RecordSchemaDTO>
