@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: ./frontend/Dockerfile
     ports:
-      - '80:80'
+      - '0.0.0.0:5556:80'
     depends_on:
       - backend
     restart: always
@@ -28,13 +28,14 @@ services:
       - app-network
 
   db:
-    image: postgres:13
+    image: postgres:15
     env_file:
       - .db.env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql-15/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
-      - '5432:5432'
+      - '5555:5555'
     restart: always
     networks:
       - app-network

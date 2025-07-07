@@ -13,8 +13,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
+  const origins = process.env.ALLOWED_ORIGINS?.split(',');
+
+  console.log(origins);
+
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://10.84.10.84:5173'],
+    origin: origins,
   });
 
   app.useGlobalPipes(
@@ -25,6 +29,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(3001, '0.0.0.0');
 }
 bootstrap();
