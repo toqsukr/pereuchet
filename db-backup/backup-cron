@@ -1,0 +1,1 @@
+0 */2 * * * pg_dump "postgresql://postgres:qwerty123@db:5555/pereuchet-db" -Fc > /backups/db_$(date +\%Y-\%m-\%d_\%H-\%M-\%S).dump && find /backups -name "*.dump" -mtime +2 -delete
