@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import type { FC, SVGProps } from 'react'
 
 const Spinner: FC<SVGProps<SVGSVGElement>> = props => {
@@ -6,7 +7,10 @@ const Spinner: FC<SVGProps<SVGSVGElement>> = props => {
       <svg
         {...props}
         aria-hidden='true'
-        className='w-full h-full max-w-8 max-h-8 text-gray-200 animate-spin dark:text-[var(--background-color)] fill-[#fff]'
+        className={cn(
+          'w-full h-full max-w-8 max-h-8 text-gray-200 animate-spin dark:text-[var(--background-color)] fill-[#fff]',
+          props.className
+        )}
         viewBox='0 0 100 101'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'>

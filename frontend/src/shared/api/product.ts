@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import baseTemplate from './axios-template'
+import baseTemplate from './base-template'
 
 const ProductSchema = z.object({
   code: z.string().min(1),

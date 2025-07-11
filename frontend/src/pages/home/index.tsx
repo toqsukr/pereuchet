@@ -1,7 +1,6 @@
 import { useProducts } from '@entities/product'
 import { useWorkers } from '@entities/worker'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { RecordSchemaDTO } from '@shared/api/record'
 import Button from '@shared/uikit/button/button'
 import ContentField from '@shared/uikit/content-field'
 import Input from '@shared/uikit/input'
@@ -9,6 +8,12 @@ import Select from '@shared/uikit/select/select'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useSaveRecord } from './model/use-save-record'
+
+const FormSchemaDTO = z.object({
+  workerID: z.coerce.number().min(1),
+  productCode: z.string().min(1),
+  amount: z.coerce.number().positive().int().max(5000),
+})
 
 const HomePage = () => {
   const { data: workers } = useWorkers()
@@ -21,10 +26,10 @@ const HomePage = () => {
       productCode: undefined,
       workerID: undefined,
     },
-    resolver: zodResolver(RecordSchemaDTO),
+    resolver: zodResolver(FormSchemaDTO),
   })
 
-  const handleSaveProduct = async (data: z.infer<typeof RecordSchemaDTO>) => {
+  const handleSaveProduct = async (data: z.infer<typeof FormSchemaDTO>) => {
     try {
       await saveRecord(data)
       resetField('amount')
@@ -35,7 +40,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className='w-full max-w-[576px] min-w-[285px] p-8 mx-auto fixed top-1/3 left-1/2 -translate-1/2'>
+    <div className='w-full max-w-[576px] min-w-[285px] fixed top-1/3 left-1/2 -translate-1/2 p-8'>
       <ContentField title={'Добавление продукта'}>
         <form onSubmit={e => e.preventDefault()} className='flex flex-col gap-4'>
           <Controller

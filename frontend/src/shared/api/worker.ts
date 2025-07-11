@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import baseTemplate from './axios-template'
+import baseTemplate from './base-template'
 
 const WorkerSchema = z.object({
   id: z.number(),
