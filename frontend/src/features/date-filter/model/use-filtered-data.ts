@@ -1,6 +1,6 @@
 import type { TRecord } from '@entities/record'
-import { useDateFilter } from '@features/date-filter'
 import dayjs from 'dayjs'
+import { useDateFilter } from './store'
 
 export const useFilteredData = (data: TRecord[] | undefined) => {
   const { filter } = useDateFilter()
