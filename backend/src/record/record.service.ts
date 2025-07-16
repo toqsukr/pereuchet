@@ -89,6 +89,6 @@ export class RecordService {
       );
     }
     await this.prisma.record.delete({ where: { id } });
-    return 'OK';
+    return 'Success!';
   }
 }

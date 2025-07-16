@@ -6,7 +6,9 @@ import {
   HttpCode,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 import {
   CreateRecordDTO,
   DeleteRecordDTO,
@@ -20,6 +22,7 @@ export class RecordController {
 
   @Get()
   @HttpCode(200)
+  @UseGuards(AuthGuard)
   getRecords() {
     return this.recordService.getRecords();
   }
@@ -32,12 +35,14 @@ export class RecordController {
 
   @Put()
   @HttpCode(201)
+  @UseGuards(AuthGuard)
   updateRecord(@Body() recordDTO: UpdateRecordDTO) {
     return this.recordService.updateRecord(recordDTO);
   }
 
   @Delete()
   @HttpCode(201)
+  @UseGuards(AuthGuard)
   deleteRecord(@Body() recordDTO: DeleteRecordDTO) {
     return this.recordService.deleteRecord(recordDTO.id);
   }
