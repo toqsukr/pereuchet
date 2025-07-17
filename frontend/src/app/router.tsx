@@ -3,15 +3,17 @@ import ControlBoardPage from '@pages/control-board'
 import HomePage from '@pages/home'
 import { Routes } from '@shared/model/routes'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
-import AuthLayout from './auth-layout'
+import { QueryErrorBoundary } from './query-error-boundary'
 
 export const router = createBrowserRouter([
   {
     path: Routes.HOME,
     element: (
-      <div className='w-full p-8'>
-        <Outlet />
-      </div>
+      <QueryErrorBoundary>
+        <div className='w-full p-8'>
+          <Outlet />
+        </div>
+      </QueryErrorBoundary>
     ),
     children: [
       {
@@ -20,11 +22,7 @@ export const router = createBrowserRouter([
       },
       {
         path: Routes.CONTROL_BOARD,
-        element: (
-          <AuthLayout>
-            <ControlBoardPage />
-          </AuthLayout>
-        ),
+        element: <ControlBoardPage />,
       },
       {
         path: Routes.AUTH,

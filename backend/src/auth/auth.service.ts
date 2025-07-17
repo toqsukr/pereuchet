@@ -1,9 +1,15 @@
+import { CookieSerializeOptions } from '@fastify/cookie';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { FastifyReply } from 'fastify';
 import { PrismaService } from 'src/prisma.service';
 import { LoginDTO, RegisterDTO } from './auth.dto';
+
+const cookieConfig: CookieSerializeOptions = {
+  httpOnly: true,
+  path: '/',
+} as const;
 
 @Injectable()
 export class AuthService {
@@ -17,7 +23,7 @@ export class AuthService {
   generateToken(adminID: string) {
     const payload = { sub: adminID };
     const options = {
-      expiresIn: '10m',
+      expiresIn: '8h',
       secret: process.env.SECRET_JWT,
     };
     return this.jwt.sign(payload, options);
@@ -30,15 +36,13 @@ export class AuthService {
     });
     const isMatch = await bcrypt.compare(password, admin?.hash ?? '');
     if (!isMatch) {
-      return new HttpException(`Non authorized!`, HttpStatus.UNAUTHORIZED);
+      throw new HttpException(`Non authorized!`, HttpStatus.CONFLICT);
     }
 
     const generatedToken = this.generateToken(login);
 
     return response
-      .setCookie('jwt-token', generatedToken, {
-        httpOnly: true,
-      })
+      .setCookie('jwt-token', generatedToken, cookieConfig)
       .status(HttpStatus.OK)
       .send({
         statusCode: HttpStatus.OK,
@@ -61,9 +65,7 @@ export class AuthService {
     }
 
     return response
-      .setCookie('jwt-token', generatedToken, {
-        httpOnly: true,
-      })
+      .setCookie('jwt-token', generatedToken, cookieConfig)
       .status(HttpStatus.OK)
       .send({
         statusCode: HttpStatus.OK,

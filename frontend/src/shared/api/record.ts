@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import authTemplate from './auth-template'
 import baseTemplate from './base-template'
 
 export const RecordSchemaDTO = z.object({
@@ -15,7 +16,7 @@ const RECORD_PREFIX = '/record'
 
 export const recordService = {
   async getRecords() {
-    return baseTemplate.get(RECORD_PREFIX).then(({ data }) => RecordSchemaDTO.array().parse(data))
+    return authTemplate.get(RECORD_PREFIX).then(({ data }) => RecordSchemaDTO.array().parse(data))
   },
 
   async saveRecord(recordData: Omit<RecordDTO, 'id' | 'date'>) {
