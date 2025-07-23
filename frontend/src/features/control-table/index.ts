@@ -1,5 +1,2 @@
-export { useResetPage } from './model/use-reset-page'
-export { MAX_ROWS } from './model/use-sliced-data'
-export { useTableData } from './model/use-table-data'
 export { ControlTable } from './ui/control-table'
-export { NumberedPanel } from './ui/numbered-panel'
+export { TableCell } from './ui/table-cell'

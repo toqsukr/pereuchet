@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import baseTemplate from './base-template'
+import authTemplate from './auth-template'
 
 const WorkerSchema = z.object({
   id: z.number(),
@@ -8,6 +8,6 @@ const WorkerSchema = z.object({
 
 export const workerService = {
   async getWorkers() {
-    return baseTemplate.get('/worker').then(({ data }) => WorkerSchema.array().parse(data))
+    return authTemplate.get('/worker').then(({ data }) => WorkerSchema.array().parse(data))
   },
 } as const

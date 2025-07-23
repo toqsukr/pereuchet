@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import authTemplate from './auth-template'
-import baseTemplate from './base-template'
 
 export const RecordSchemaDTO = z.object({
   id: z.number(),
@@ -20,7 +19,7 @@ export const recordService = {
   },
 
   async saveRecord(recordData: Omit<RecordDTO, 'id' | 'date'>) {
-    return baseTemplate
+    return authTemplate
       .post(RECORD_PREFIX, recordData)
       .then(({ data }) => RecordSchemaDTO.parse(data))
   },

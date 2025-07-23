@@ -1,17 +1,26 @@
+import cn from 'classnames'
 import type { FC, HTMLProps, PropsWithChildren } from 'react'
 import css from './select.module.scss'
 
-const Option: FC<PropsWithChildren<HTMLProps<HTMLOptionElement>>> = ({ children, ...props }) => {
+const Option: FC<PropsWithChildren<HTMLProps<HTMLOptionElement>>> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
-    <option {...props} className='text-white font-medium p-4 truncate'>
+    <option {...props} className={cn('text-white font-medium p-4 truncate', className)}>
       {children}
     </option>
   )
 }
 
-const Select = ({ children, ...props }: PropsWithChildren<HTMLProps<HTMLSelectElement>>) => {
+const Select = ({
+  children,
+  className,
+  ...props
+}: PropsWithChildren<HTMLProps<HTMLSelectElement>>) => {
   return (
-    <select {...props} className={css.select}>
+    <select {...props} className={cn(css.select, className)}>
       {children}
     </select>
   )

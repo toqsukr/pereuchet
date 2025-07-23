@@ -5,7 +5,7 @@ export type InputProps = {
   Button?: ReactNode
 } & HTMLProps<HTMLInputElement>
 
-const Input = forwardRef<HTMLInputElement, InputProps>(({ Button, ...props }, ref) => {
+const Input = forwardRef<HTMLInputElement, InputProps>(({ Button, className, ...props }, ref) => {
   return (
     <div className='relative rounded-[.625rem]'>
       <input
@@ -13,6 +13,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ Button, ...props }, re
         ref={ref}
         className={cn(
           'w-full h-[2.8rem] p-[0.8rem] font-bold rounded-[0.625rem] text-[var(--text-primary-color)] bg-[var(--background-color)] placeholder:text-[var(--text-third-color)] file:hidden disabled:opacity-50 truncate',
+          className,
           {
             ['pr-[3.6rem]']: !!Button,
           }
