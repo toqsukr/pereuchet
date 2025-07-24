@@ -1,3 +1,5 @@
+import AddProductPage from '@pages/add-product'
+import AddWorkerPage from '@pages/add-worker'
 import AuthPage from '@pages/auth'
 import ControlBoardPage from '@pages/control-board'
 import HomePage from '@pages/home'
@@ -36,6 +38,14 @@ export const router = createBrowserRouter([
           {
             path: Routes.CONTROL_BOARD,
             element: <ControlBoardPage />,
+          },
+          {
+            path: Routes.ADD_WORKER,
+            element: <AddWorkerPage />,
+          },
+          {
+            path: Routes.ADD_PRODUCT,
+            element: <AddProductPage />,
           },
         ],
       },

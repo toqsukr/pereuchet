@@ -4,6 +4,8 @@ import { NavigationLink } from './navigation-link'
 const names: Record<Exclude<Path, 'AUTH'>, string> = {
   HOME: 'Добавление продукта',
   CONTROL_BOARD: 'Панель управления',
+  ADD_PRODUCT: 'Добавление продукции',
+  ADD_WORKER: 'Добавление штамповщика',
 }
 
 export const RouteLinkList = () => {

@@ -1,6 +1,8 @@
 import { z } from 'zod'
 import authTemplate from './auth-template'
 
+const RECORD_PREFIX = '/record'
+
 export const RecordSchemaDTO = z.object({
   id: z.number(),
   date: z.coerce.date(),
@@ -10,8 +12,6 @@ export const RecordSchemaDTO = z.object({
 })
 
 type RecordDTO = z.infer<typeof RecordSchemaDTO>
-
-const RECORD_PREFIX = '/record'
 
 export const recordService = {
   async getRecords() {
