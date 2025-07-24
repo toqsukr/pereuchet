@@ -24,7 +24,9 @@ export class WorkerService {
 
   async getWorkers() {
     this.logger.log('Fetching all workers');
-    const workers = await this.prisma.worker.findMany();
+    const workers = (await this.prisma.worker.findMany()).sort(
+      (a, b) => a.id - b.id,
+    );
     return JSON.stringify(workers);
   }
 
