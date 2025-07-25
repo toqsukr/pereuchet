@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateWorkerDTO {
@@ -17,6 +18,7 @@ export class DeleteWorkerDTO {
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
+  @Transform(({ value }) => parseInt(value, 10))
   id: number;
 }
 

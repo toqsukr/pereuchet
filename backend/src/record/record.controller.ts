@@ -7,6 +7,7 @@ import {
   Logger,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -49,8 +50,8 @@ export class RecordController {
   @Delete()
   @HttpCode(201)
   @UseGuards(AuthGuard)
-  deleteRecord(@Body() recordDTO: DeleteRecordDTO) {
-    this.logger.warn(`DELETE /record - Deleting record ID: ${recordDTO.id}`);
-    return this.recordService.deleteRecord(recordDTO.id);
+  deleteRecord(@Query() query: DeleteRecordDTO) {
+    this.logger.warn(`DELETE /record - Deleting record ID: ${query.id}`);
+    return this.recordService.deleteRecord(query.id);
   }
 }

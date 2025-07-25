@@ -7,6 +7,7 @@ import {
   Logger,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -51,8 +52,8 @@ export class WorkerController {
   @Delete()
   @HttpCode(201)
   @UseGuards(AuthGuard)
-  deleteWorker(@Body() workerDTO: DeleteWorkerDTO) {
-    this.logger.verbose(`DELETE /worker - Deleting worker ID: ${workerDTO.id}`);
-    return this.workerService.deleteWorker(workerDTO.id);
+  deleteWorker(@Query() query: DeleteWorkerDTO) {
+    this.logger.verbose(`DELETE /worker - Deleting worker ID: ${query.id}`);
+    return this.workerService.deleteWorker(query.id);
   }
 }

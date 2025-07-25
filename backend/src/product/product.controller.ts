@@ -7,6 +7,7 @@ import {
   Logger,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -54,10 +55,8 @@ export class ProductController {
   @Delete()
   @HttpCode(201)
   @UseGuards(AuthGuard)
-  deleteProduct(@Body() productDTO: DeleteProductDTO) {
-    this.logger.warn(
-      `DELETE /product - Deleting product code: ${productDTO.code}`,
-    );
-    return this.productService.deleteProduct(productDTO.code);
+  deleteProduct(@Query() query: DeleteProductDTO) {
+    this.logger.warn(`DELETE /product - Deleting product code: ${query.code}`);
+    return this.productService.deleteProduct(query.code);
   }
 }

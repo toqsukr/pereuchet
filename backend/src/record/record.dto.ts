@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
@@ -29,6 +30,7 @@ export class DeleteRecordDTO {
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
+  @Transform(({ value }) => parseInt(value, 10))
   id: number;
 }
 
