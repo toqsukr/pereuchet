@@ -15,7 +15,7 @@ export const router = createBrowserRouter([
     path: Routes.HOME,
     element: (
       <QueryErrorBoundary>
-        <div className='w-full p-8'>
+        <div className='w-full'>
           <LoadingLayout>
             <Outlet />
           </LoadingLayout>
@@ -26,8 +26,14 @@ export const router = createBrowserRouter([
       {
         element: (
           <AuthLoadingLayout>
-            <NavigationPanel />
-            <Outlet />
+            <section className='fixed top-1/2 left-1/2 -translate-1/2 flex flex-col gap-8 max-w-[2560px] max-h-[856px] w-screen h-screen p-8 overflow-y-auto'>
+              <div className='relative h-full w-full'>
+                <Outlet />
+              </div>
+              <div className='w-full mx-auto'>
+                <NavigationPanel />
+              </div>
+            </section>
           </AuthLoadingLayout>
         ),
         children: [

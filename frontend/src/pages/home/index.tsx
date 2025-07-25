@@ -40,7 +40,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className='w-full max-w-[576px] min-w-[285px] fixed top-1/3 left-1/2 -translate-1/2 p-8'>
+    <div className='w-full max-w-[576px] min-w-[285px] absolute top-1/3 left-1/2 -translate-1/2 p-8'>
       <ContentField title={'Добавление продукта'}>
         <form onSubmit={e => e.preventDefault()} className='flex flex-col gap-4'>
           <Controller

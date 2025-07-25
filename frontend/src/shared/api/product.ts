@@ -16,4 +16,8 @@ export const productService = {
   async createProduct(data: { code: string; name: string }) {
     return authTemplate.post(PRODUCT_PREFIX, { ...data })
   },
+
+  async deleteProduct(code: string) {
+    return authTemplate.delete(PRODUCT_PREFIX, { params: { code } })
+  },
 } as const

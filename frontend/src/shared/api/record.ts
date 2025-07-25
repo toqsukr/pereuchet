@@ -23,4 +23,14 @@ export const recordService = {
       .post(RECORD_PREFIX, recordData)
       .then(({ data }) => RecordSchemaDTO.parse(data))
   },
+
+  async updateRecord(recordData: Omit<RecordDTO, 'id' | 'date'>) {
+    return authTemplate
+      .put(RECORD_PREFIX, recordData)
+      .then(({ data }) => RecordSchemaDTO.parse(data))
+  },
+
+  async deleteRecord(id: number) {
+    return authTemplate.delete(RECORD_PREFIX, { params: { id } })
+  },
 } as const

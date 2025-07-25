@@ -16,7 +16,7 @@ type ContentFieldProps = { title?: ReactNode; onBack?: () => void }
 
 const ContentField = ({ children, title, onBack }: PropsWithChildren<ContentFieldProps>) => {
   return (
-    <section className='h-max text-white bg-[var(--content-field-color)] p-6 rounded-[1rem]'>
+    <section className='h-full text-white bg-[var(--content-field-color)] p-6 rounded-[1rem]'>
       {title && (
         <header style={{ lineHeight: '2rem' }} className='text-[1.3rem] font-bold mb-[1.5rem]'>
           <div className='flex items-center gap-5'>

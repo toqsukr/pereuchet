@@ -42,10 +42,10 @@ const ControlBoardPage = () => {
   })
 
   return (
-    <div className='flex flex-col gap-4 w-full max-w-[1444px] min-w-[820px] fixed top-1/2 left-1/2 -translate-1/2 px-6'>
-      <div className='flex gap-4'>
+    <div className='flex flex-col gap-4 w-full h-full justify-self-center max-w-[1444px] px-6 overflow-auto'>
+      <div className='w-full min-w-[1080px] flex gap-4'>
         <DateFilter />
-        <section className='w-max flex gap-4 ml-auto bg-[var(--content-field-color)] p-4 rounded-2xl'>
+        <section className='flex gap-4 ml-auto bg-[var(--content-field-color)] p-4 rounded-2xl'>
           <ClearFilterButton />
           <ToggleEditButton />
           <ConfirmChangesButton onConfirm={() => console.log(localRecords)} />
@@ -53,7 +53,7 @@ const ControlBoardPage = () => {
           {isEditing || <ExportButton data={exportData} />}
         </section>
       </div>
-      <div className='flex gap-4 rounded-2xl'>
+      <div className='flex h-full w-full min-w-[1080px] gap-4 pb-2 rounded-2xl'>
         <ControlTable
           data={tableData}
           columnLabels={columnLabels}

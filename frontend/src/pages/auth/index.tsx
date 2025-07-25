@@ -27,7 +27,7 @@ const AuthPage = () => {
   if (isAuthorized) return <Navigate to={Routes.HOME} />
 
   return (
-    <section className='h-full w-full max-w-[576px] min-w-[285px] fixed top-1/2 left-1/2 -translate-1/2 p-8 flex justify-center items-center'>
+    <section className='h-max w-full max-w-[576px] min-w-[285px] fixed top-1/2 left-1/2 -translate-1/2 p-8 flex justify-center items-center'>
       <ContentField title='Вход в аккаунт'>
         <form onSubmit={handleSubmit(onSubmit)} className='h-full flex flex-col gap-4'>
           <Controller

@@ -7,6 +7,5 @@ export const useProducts = () => {
   return useQuery({
     queryKey: [PRODUCTS_QUERY_KEY],
     queryFn: () => productService.getProducts(),
-    refetchInterval: 30 * 1000, // 30sec
   })
 }

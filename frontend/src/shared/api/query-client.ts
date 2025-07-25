@@ -4,6 +4,7 @@ import { UnauthorizedError } from './auth-template'
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 30 * 1000,
       retry: (_, error) => {
         return !(error instanceof UnauthorizedError)
       },

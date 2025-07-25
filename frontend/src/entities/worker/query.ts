@@ -7,6 +7,5 @@ export const useWorkers = () => {
   return useQuery({
     queryKey: [WORKERS_QUERY_KEY],
     queryFn: () => workerService.getWorkers(),
-    refetchInterval: 30 * 1000, // 30sec
   })
 }

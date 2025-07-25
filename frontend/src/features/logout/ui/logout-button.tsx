@@ -1,3 +1,5 @@
+import { IconButton } from '@shared/uikit/icon-button'
+import { IoExitOutline } from 'react-icons/io5'
 import { useNavigate } from 'react-router-dom'
 import { useLogout } from '../api/use-logout'
 
@@ -12,8 +14,9 @@ export const LogoutButton = () => {
   }
 
   return (
-    <button onClick={handleLogout} className='flex justify-center items-center h-full'>
-      Выйти
-    </button>
+    <IconButton
+      onClick={handleLogout}
+      Icon={<IoExitOutline className='w-6 h-6 scale-125 translate-x-0.5' />}
+    />
   )
 }

@@ -16,4 +16,8 @@ export const workerService = {
   async createWorker(data: { id: number; name: string }) {
     return authTemplate.post(WORKER_PREFIX, { ...data })
   },
+
+  async deleteWorker(id: number) {
+    return authTemplate.delete(WORKER_PREFIX, { params: { id } })
+  },
 } as const
