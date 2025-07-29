@@ -3,7 +3,7 @@ export const useExportData = ({
   labels,
 }: {
   data: object[] | undefined
-  labels: string[]
+  labels: readonly string[]
 }) => {
   return [labels, ...(data ?? []).map(obj => [...Object.values(obj)])]
 }

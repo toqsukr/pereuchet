@@ -4,7 +4,7 @@ import authTemplate from './auth-template'
 const RECORD_PREFIX = '/record'
 
 export const RecordSchemaDTO = z.object({
-  id: z.number(),
+  id: z.coerce.number(),
   date: z.coerce.date(),
   workerID: z.coerce.number().min(1),
   productCode: z.string().min(1),
@@ -28,6 +28,10 @@ export const recordService = {
     return authTemplate
       .put(RECORD_PREFIX, recordData)
       .then(({ data }) => RecordSchemaDTO.parse(data))
+  },
+
+  async massUpdateRecords(records: RecordDTO[]) {
+    return authTemplate.put(`${RECORD_PREFIX}/mass-update`, { records })
   },
 
   async deleteRecord(id: number) {

@@ -4,23 +4,25 @@ import { useWorkers } from '@entities/worker'
 import { TableCell } from '@features/control-table'
 import { useEditRecords } from '@features/edit-records'
 import Input from '@shared/uikit/input'
-import { useMemo, type FC } from 'react'
+import classNames from 'classnames'
+import { useMemo } from 'react'
+import { Controller, type Control, type FieldValues } from 'react-hook-form'
 import { CellSelect } from './cell-select'
 
-type RecordRowProps = {
+type RecordRowProps<
+  TFieldValues extends FieldValues,
+  TContext = any,
+  TTransformedValues = TFieldValues
+> = {
   record: TRecord
-  saveRecord: (record: TRecord) => void
+  control: Control<TFieldValues, TContext, TTransformedValues>
 }
 
-export const RecordRow: FC<RecordRowProps> = ({ record, saveRecord }) => {
+export const RecordRow = ({ record, control }: RecordRowProps<Record<string, TRecord>>) => {
   const { data: workers } = useWorkers()
   const { data: products } = useProducts()
   const { isEditing } = useEditRecords()
   const getProductByCode = useProductByCode()
-
-  const handleSaveRecord = <K extends keyof TRecord>(k: K, v: TRecord[K]) => {
-    saveRecord({ ...record, [k]: v })
-  }
 
   const workerOptions = useMemo(
     () =>
@@ -28,7 +30,7 @@ export const RecordRow: FC<RecordRowProps> = ({ record, saveRecord }) => {
         value: worker.id,
         children: worker.id,
       })),
-    [workers, record.workerID]
+    [workers]
   )
 
   const productOptions = useMemo(
@@ -37,7 +39,7 @@ export const RecordRow: FC<RecordRowProps> = ({ record, saveRecord }) => {
         value: product.code,
         children: product.name,
       })),
-    [products, record.productCode]
+    [products]
   )
 
   if (!isEditing)
@@ -54,22 +56,58 @@ export const RecordRow: FC<RecordRowProps> = ({ record, saveRecord }) => {
 
   return (
     <>
-      <TableCell>{record.id}</TableCell>
-      <TableCell>{record.date}</TableCell>
-      <CellSelect
-        options={workerOptions}
+      <Controller
+        control={control}
+        name={`${record.id}.id`}
+        defaultValue={record.id}
+        render={() => <TableCell>{record.id}</TableCell>}
+      />
+      <Controller
+        control={control}
+        name={`${record.id}.date`}
+        defaultValue={record.date}
+        render={() => <TableCell>{record.date}</TableCell>}
+      />
+      <Controller
+        control={control}
+        name={`${record.id}.workerID`}
         defaultValue={record.workerID}
-        onChange={e => handleSaveRecord('workerID', parseInt(e.currentTarget.value))}
+        render={({ field, fieldState }) => (
+          <CellSelect
+            {...field}
+            className={classNames({ ['bg-emerald-400!']: fieldState.isDirty })}
+            options={workerOptions}
+          />
+        )}
       />
-      <CellSelect
-        options={productOptions}
+      <Controller
+        control={control}
+        name={`${record.id}.productCode`}
         defaultValue={record.productCode}
-        onChange={e => handleSaveRecord('productCode', e.currentTarget.value)}
+        render={({ field, fieldState }) => (
+          <CellSelect
+            {...field}
+            className={classNames({ ['bg-emerald-400!']: fieldState.isDirty })}
+            options={productOptions}
+          />
+        )}
       />
-      <Input
-        onChange={e => handleSaveRecord('amount', parseInt(e.currentTarget.value))}
-        className='h-full! border-r-2 border-b-2 border-[var(--background-color)] bg-[var(--content-field-color)]! rounded-none!'
-        value={record.amount}
+      <Controller
+        control={control}
+        name={`${record.id}.amount`}
+        defaultValue={record.amount}
+        render={({ field, fieldState }) => (
+          <Input
+            {...field}
+            className={classNames(
+              'h-full! border-r-2 border-b-2 border-[var(--background-color)] bg-[var(--content-field-color)]! rounded-none! transition-colors',
+              {
+                ['bg-emerald-400!']: fieldState.isDirty,
+                ['bg-red-400!']: !!fieldState.error?.message,
+              }
+            )}
+          />
+        )}
       />
     </>
   )

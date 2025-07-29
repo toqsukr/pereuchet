@@ -1,22 +1,24 @@
 import { Routes, type Path } from '@shared/model/routes'
-import { IconButton } from '@shared/uikit/icon-button'
+import NavWithIcon from '@shared/uikit/nav-with-icon'
 import type { ReactNode } from 'react'
 import { BsTable } from 'react-icons/bs'
+import { FiEdit } from 'react-icons/fi'
 import { GiSlippers } from 'react-icons/gi'
 import { IoPersonAdd } from 'react-icons/io5'
-import { TbEdit } from 'react-icons/tb'
+import { useLocation } from 'react-router-dom'
 import { NavigationLink } from './navigation-link'
 
 const names: Record<Exclude<Path, 'AUTH'>, ReactNode> = {
-  HOME: <TbEdit className='w-6 h-6 scale-125' />,
+  HOME: <FiEdit className='w-6 h-6 scale-110' />,
   CONTROL_BOARD: <BsTable className='w-6 h-6' />,
   ADD_PRODUCT: <GiSlippers className='w-6 h-6' />,
   ADD_WORKER: <IoPersonAdd className='w-6 h-6' />,
 }
 
 export const RouteLinkList = () => {
+  const { pathname } = useLocation()
   return (
-    <>
+    <ul className='flex h-full gap-6 items-center'>
       {Object.keys(Routes)
         .filter(path => path !== 'AUTH')
         .map(path => {
@@ -26,11 +28,11 @@ export const RouteLinkList = () => {
               <NavigationLink
                 className='flex justify-center items-center h-full'
                 to={Routes[routePath]}>
-                <IconButton Icon={names[routePath]} />
+                <NavWithIcon active={pathname === Routes[routePath]} Icon={names[routePath]} />
               </NavigationLink>
             </li>
           )
         })}
-    </>
+    </ul>
   )
 }

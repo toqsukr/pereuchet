@@ -1,5 +1,5 @@
 import { useProductByCode } from '@entities/product'
-import { useRecords } from '@entities/record'
+import { useInvalidateRecords, useRecords, type TRecord } from '@entities/record'
 import { ControlTable } from '@features/control-table'
 import { ExportButton, useExportData } from '@features/csv-export'
 import { ClearFilterButton, DateFilter, useFilteredData } from '@features/date-filter'
@@ -9,28 +9,68 @@ import {
   ToggleEditButton,
   useEditRecords,
 } from '@features/edit-records'
-import { useLocalRecords } from './model/use-local-records'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { arrayToRecordWithID } from '@shared/lib/transform'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { useSaveEditing } from './model/use-save-editing'
 import './styles.scss'
 import { RecordRow } from './ui/record-row'
 
-const columnLabels = ['ID', 'Дата', 'Штамповщик', 'Тип', 'Количество']
+const columnLabels = ['ID', 'Дата', 'Штамповщик', 'Тип', 'Количество'] as const
+
+const RecordFormSchema = z.record(
+  z.object({
+    id: z.coerce.number(),
+    date: z.string(),
+    workerID: z.coerce.number(),
+    productCode: z.string(),
+    amount: z.coerce.number().min(1),
+  })
+)
 
 // dayjs(date).format('DD.MM.YYYY HH:mm:ss')
 
 const ControlBoardPage = () => {
-  const { isEditing } = useEditRecords()
+  const { isEditing, updateIsEditing } = useEditRecords()
   const { data: records } = useRecords()
+  const invalidateRecords = useInvalidateRecords()
   const getProductByCode = useProductByCode()
-  const { localRecords, updateRecord } = useLocalRecords() // ?
-  const filteredData = useFilteredData(isEditing ? localRecords : records)
+  const filteredData = useFilteredData(records)
+  const { mutateAsync: saveEditing } = useSaveEditing()
 
-  const tableData = filteredData?.map(({ productCode, amount, date, id, workerID }) => ({
-    id,
-    date,
-    workerID,
-    productCode,
-    amount,
-  }))
+  useEffect(() => {
+    return () => {
+      updateIsEditing(false)
+    }
+  }, [])
+
+  const tableData = useMemo(
+    () =>
+      filteredData?.map(({ productCode, amount, date, id, workerID }) => ({
+        id,
+        date,
+        workerID,
+        productCode,
+        amount,
+      })),
+    [filteredData]
+  )
+
+  const formSettings = useForm({
+    mode: 'onChange',
+    resolver: zodResolver(RecordFormSchema),
+  })
+
+  const memoizedControl = useMemo(() => formSettings.control, [formSettings.control])
+
+  const memoizedGetCells = useCallback(
+    (_row: number, value: TRecord) => (
+      <RecordRow key={value.id} record={value} control={memoizedControl} />
+    ),
+    [memoizedControl]
+  )
 
   const exportData = useExportData({
     labels: columnLabels,
@@ -41,6 +81,12 @@ const ControlBoardPage = () => {
     })),
   })
 
+  const onValidSubmit = async (data: Record<string, TRecord>) => {
+    await saveEditing(data)
+    formSettings.reset(data)
+    invalidateRecords()
+  }
+
   return (
     <div className='flex flex-col gap-4 w-full h-full justify-self-center max-w-[1444px] px-6 overflow-auto'>
       <div className='w-full min-w-[1080px] flex gap-4'>
@@ -48,19 +94,20 @@ const ControlBoardPage = () => {
         <section className='flex gap-4 ml-auto bg-[var(--content-field-color)] p-4 rounded-2xl'>
           <ClearFilterButton />
           <ToggleEditButton />
-          <ConfirmChangesButton onConfirm={() => console.log(localRecords)} />
-          <CancelChangesButton />
+          <ConfirmChangesButton
+            disabled={!formSettings.formState.isValid}
+            fieldChanged={formSettings.formState.isDirty}
+            onConfirm={formSettings.handleSubmit(onValidSubmit)}
+            onCancel={() => formSettings.reset(arrayToRecordWithID(tableData))}
+          />
+          <CancelChangesButton
+            onCancel={() => formSettings.reset(arrayToRecordWithID(tableData))}
+          />
           {isEditing || <ExportButton data={exportData} />}
         </section>
       </div>
       <div className='flex h-full w-full min-w-[1080px] gap-4 pb-2 rounded-2xl'>
-        <ControlTable
-          data={tableData}
-          columnLabels={columnLabels}
-          getCells={(_, value) => (
-            <RecordRow key={value.id} record={value} saveRecord={updateRecord} />
-          )}
-        />
+        <ControlTable data={tableData} columnLabels={columnLabels} getCells={memoizedGetCells} />
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
 import { recordService } from '@shared/api/record'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 const RECORD_QUERY_KEY = 'get-all-records'
 
@@ -16,4 +16,10 @@ export const useRecords = () => {
       ),
     refetchInterval: 30 * 1000, // 30sec
   })
+}
+
+export const useInvalidateRecords = () => {
+  const queryClient = useQueryClient()
+
+  return () => queryClient.invalidateQueries({ queryKey: [RECORD_QUERY_KEY] })
 }
