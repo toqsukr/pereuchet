@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { ProductService } from 'src/product/product.service';
 import { WorkerService } from 'src/worker/worker.service';
+import { MassUpdateRecordsDTO } from './record.dto';
 
 @Injectable()
 export class RecordService {
@@ -15,7 +16,9 @@ export class RecordService {
 
   async getRecords() {
     this.logger.log('Fetching all records');
-    const records = await this.prisma.record.findMany();
+    const records = (await this.prisma.record.findMany()).sort(
+      (a, b) => a.id - b.id,
+    );
     return JSON.stringify(records);
   }
 
@@ -95,6 +98,35 @@ export class RecordService {
     });
     this.logger.log(`Record updated successfully: ID ${updatedRecord.id}`);
     return JSON.stringify(updatedRecord);
+  }
+
+  async massUpdateRecords(records: MassUpdateRecordsDTO['records']) {
+    await Promise.all(
+      records.map(async (record) => {
+        if (record.productCode) {
+          await this.product.getProductByCode(record.productCode);
+        }
+        if (record.workerID) {
+          await this.worker.getWorkerByID(record.workerID);
+        }
+        await this.getRecordByID(record.id);
+      }),
+    );
+
+    return this.prisma.$transaction(async (tx) => {
+      const updates = records.map((record) =>
+        tx.record.update({
+          where: { id: record.id },
+          data: {
+            amount: record.amount,
+            productCode: record.productCode,
+            workerID: record.workerID,
+          },
+        }),
+      );
+      const results = await Promise.all(updates);
+      return JSON.stringify(results);
+    });
   }
 
   async deleteRecord(id: number) {

@@ -14,6 +14,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import {
   CreateRecordDTO,
   DeleteRecordDTO,
+  MassUpdateRecordsDTO,
   UpdateRecordDTO,
 } from './record.dto';
 import { RecordService } from './record.service';
@@ -45,6 +46,14 @@ export class RecordController {
   updateRecord(@Body() recordDTO: UpdateRecordDTO) {
     this.logger.warn(`PUT /record - Updating record ID: ${recordDTO.id}`);
     return this.recordService.updateRecord(recordDTO);
+  }
+
+  @Put('/mass-update')
+  @HttpCode(201)
+  @UseGuards(AuthGuard)
+  massUpdateRecords(@Body() body: MassUpdateRecordsDTO) {
+    this.logger.warn(`PUT /record/mass-update - Mass records updating`);
+    return this.recordService.massUpdateRecords(body.records);
   }
 
   @Delete()
