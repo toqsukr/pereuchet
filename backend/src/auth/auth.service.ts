@@ -43,7 +43,10 @@ export class AuthService {
     const isMatch = await bcrypt.compare(password, admin?.hash ?? '');
     if (!isMatch) {
       this.logger.warn(`Failed login attempt for: ${loginData.login}`);
-      throw new HttpException(`Non authorized!`, HttpStatus.CONFLICT);
+      throw new HttpException(
+        `Неверный логин или пароль!`,
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     const generatedToken = this.generateToken(login);
@@ -64,14 +67,24 @@ export class AuthService {
     const hash = await bcrypt.hash(password, this.saltOrRounds);
     const generatedToken = this.generateToken(login);
 
+    const loginEqualExisted = await this.prisma.admin.findUnique({
+      where: { login },
+    });
+
+    if (typeof loginEqualExisted !== null)
+      throw new HttpException(
+        `Пользователь с таким логином уже существует!`,
+        HttpStatus.BAD_REQUEST,
+      );
+
     try {
       await this.prisma.admin.create({ data: { login, hash } });
       this.logger.log(`New admin registered: ${login}`);
     } catch (e) {
       this.logger.error(`Registration failed for ${login}: ${e.message}`);
       throw new HttpException(
-        `Admin creation error: ${e}`,
-        HttpStatus.BAD_REQUEST,
+        `Ошибка регистрации: ${e}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
 
@@ -114,7 +127,7 @@ export class AuthService {
     } catch (error) {
       this.logger.error(`Logout failed: ${error.message}`, error.stack);
       throw new HttpException(
-        'Logout failed',
+        'Ошибка логаута',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     } finally {

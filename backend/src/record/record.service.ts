@@ -28,7 +28,7 @@ export class RecordService {
     if (!foundRecord) {
       this.logger.warn(`Record not found: ID ${id}`);
       throw new HttpException(
-        `Record by id ${id} not found!`,
+        `Запись с номером ${id} не найдена!`,
         HttpStatus.NOT_FOUND,
       );
     }
@@ -135,7 +135,7 @@ export class RecordService {
     if (!foundRecord) {
       this.logger.error(`Delete failed: record ID ${id} not found`);
       throw new HttpException(
-        `Record by id ${id} not found!`,
+        `Запись с номером ${id} не найдена!`,
         HttpStatus.NOT_FOUND,
       );
     }

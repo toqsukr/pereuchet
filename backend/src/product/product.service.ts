@@ -17,7 +17,7 @@ export class ProductService {
     if (!foundProduct) {
       this.logger.warn(`Product not found: ${code}`);
       throw new HttpException(
-        `Product by code ${code} not found!`,
+        `Продукт с кодом ${code} не найден!`,
         HttpStatus.NOT_FOUND,
       );
     }

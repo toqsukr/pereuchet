@@ -15,7 +15,7 @@ export class WorkerService {
     if (!foundWorker) {
       this.logger.warn(`Worker not found: ID ${id}`);
       throw new HttpException(
-        `Worker by id ${id} not found!`,
+        `Штамповщик с номером ${id} не найден!`,
         HttpStatus.NOT_FOUND,
       );
     }
