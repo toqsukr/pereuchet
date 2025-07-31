@@ -15,7 +15,18 @@ const AuthPage = () => {
   const { mutateAsync: signIn } = useLogin()
   const { data: isAuthorized } = useIsAuth()
   const { handleSubmit, control } = useForm({
-    resolver: zodResolver(z.object({ login: z.string(), password: z.string() })),
+    resolver: zodResolver(
+      z.object({
+        login: z
+          .string()
+          .min(1)
+          .transform(val => val.trim()),
+        password: z
+          .string()
+          .min(1)
+          .transform(val => val.trim()),
+      })
+    ),
   })
 
   const onSubmit = async (formData: { login: string; password: string }) => {
@@ -27,9 +38,9 @@ const AuthPage = () => {
   if (isAuthorized) return <Navigate to={Routes.HOME} />
 
   return (
-    <section className='h-max w-full max-w-[576px] min-w-[285px] fixed top-1/2 left-1/2 -translate-1/2 p-8 flex justify-center items-center'>
+    <section className='w-full max-w-[576px] min-w-[285px] absolute top-1/3 left-1/2 -translate-1/2 p-8 flex justify-center items-center'>
       <ContentField title='Вход в аккаунт'>
-        <form onSubmit={handleSubmit(onSubmit)} className='h-full flex flex-col gap-4'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
           <Controller
             control={control}
             name='login'

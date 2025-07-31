@@ -4,17 +4,20 @@ import { CSVLink } from 'react-csv'
 import type { Data } from 'react-csv/lib/core'
 import { FaFileCsv } from 'react-icons/fa'
 
-export const ExportButton: FC<{
-  fileprefix?: string
+type ExportButtonProps = {
+  fileprefix: string
   data: string | Data | (() => string | Data)
-}> = props => {
+}
+
+export const ExportButton: FC<ExportButtonProps> = props => {
+  const { fileprefix } = props
   return (
     <CSVLink
       {...props}
       separator=';'
       target='_blank'
       title='Экспорт в CSV'
-      filename={`pereuchet-${new Date().toISOString()}.csv`}>
+      filename={`Экспорт_данных_${fileprefix}.csv`}>
       <IconButton Icon={<FaFileCsv className='w-6 h-6' />} />
     </CSVLink>
   )

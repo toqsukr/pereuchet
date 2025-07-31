@@ -1,2 +1,2 @@
-export { useExportData } from './model/use-export-data'
+export { defineExportData } from './model/define-export-data'
 export { ExportButton } from './ui/export-button'

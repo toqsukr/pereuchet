@@ -8,7 +8,10 @@ import { useAddWorker } from './api/use-add-worker'
 
 const WorkerSchemaDTO = z.object({
   id: z.coerce.number().min(1),
-  name: z.string().min(1),
+  name: z
+    .string()
+    .min(1)
+    .transform(val => val.trim()),
 })
 
 const AddWorkerPage = () => {

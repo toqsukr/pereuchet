@@ -7,8 +7,14 @@ import { z } from 'zod'
 import { useAddProduct } from './ui/use-add-product'
 
 const ProductSchemaDTO = z.object({
-  code: z.string().min(1),
-  name: z.string().min(1),
+  code: z
+    .string()
+    .min(1)
+    .transform(val => val.trim()),
+  name: z
+    .string()
+    .min(1)
+    .transform(val => val.trim()),
 })
 
 const AddProductPage = () => {

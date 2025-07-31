@@ -1,5 +1,5 @@
 import { Routes, type Path } from '@shared/model/routes'
-import NavWithIcon from '@shared/uikit/nav-with-icon'
+import NavWithIcon from '@shared/uikit/nav-with-icon/nav-with-icon'
 import type { ReactNode } from 'react'
 import { BsTable } from 'react-icons/bs'
 import { FiEdit } from 'react-icons/fi'
@@ -18,7 +18,7 @@ const names: Record<Exclude<Path, 'AUTH'>, ReactNode> = {
 export const RouteLinkList = () => {
   const { pathname } = useLocation()
   return (
-    <ul className='flex h-full gap-6 items-center'>
+    <ul className='flex h-full gap-6 p-6 rounded-3xl bg-[var(--content-field-color)] items-center'>
       {Object.keys(Routes)
         .filter(path => path !== 'AUTH')
         .map(path => {

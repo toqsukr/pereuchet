@@ -2,7 +2,7 @@ import Button from '@shared/uikit/button/button'
 import type { DetailedHTMLProps, FC, ReactNode } from 'react'
 import Spinner from './spinner'
 
-type IconButtonProps = {
+export type IconButtonProps = {
   isLoading?: boolean
   Icon: ReactNode
 } & DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>

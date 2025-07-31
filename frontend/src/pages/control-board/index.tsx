@@ -1,7 +1,5 @@
-import { useProductByCode } from '@entities/product'
 import { useInvalidateRecords, useRecords, type TRecord } from '@entities/record'
 import { ControlTable } from '@features/control-table'
-import { ExportButton, useExportData } from '@features/csv-export'
 import { ClearFilterButton, DateFilter, useFilteredData } from '@features/date-filter'
 import {
   CancelChangesButton,
@@ -16,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useSaveEditing } from './model/use-save-editing'
 import './styles.scss'
+import ExportRecordsButton from './ui/export-records-button'
 import { RecordRow } from './ui/record-row'
 
 const columnLabels = ['ID', 'Дата', 'Штамповщик', 'Тип', 'Количество'] as const
@@ -33,10 +32,9 @@ const RecordFormSchema = z.record(
 // dayjs(date).format('DD.MM.YYYY HH:mm:ss')
 
 const ControlBoardPage = () => {
-  const { isEditing, updateIsEditing } = useEditRecords()
+  const { updateIsEditing } = useEditRecords()
   const { data: records } = useRecords()
   const invalidateRecords = useInvalidateRecords()
-  const getProductByCode = useProductByCode()
   const filteredData = useFilteredData(records)
   const { mutateAsync: saveEditing } = useSaveEditing()
 
@@ -72,15 +70,6 @@ const ControlBoardPage = () => {
     [memoizedControl]
   )
 
-  const exportData = useExportData({
-    labels: columnLabels,
-    data: filteredData?.map(({ productCode, amount, ...record }) => ({
-      ...record,
-      productName: getProductByCode(productCode)?.name,
-      amount,
-    })),
-  })
-
   const onValidSubmit = async (data: Record<string, TRecord>) => {
     await saveEditing(data)
     formSettings.reset(data)
@@ -89,7 +78,7 @@ const ControlBoardPage = () => {
 
   return (
     <div className='flex flex-col gap-4 w-full h-full justify-self-center max-w-[1444px] px-6 overflow-auto'>
-      <div className='w-full min-w-[1080px] flex gap-4'>
+      <div className='w-full min-w-[840px] flex gap-4'>
         <DateFilter />
         <section className='flex gap-4 ml-auto bg-[var(--content-field-color)] p-4 rounded-2xl'>
           <ClearFilterButton />
@@ -103,10 +92,10 @@ const ControlBoardPage = () => {
           <CancelChangesButton
             onCancel={() => formSettings.reset(arrayToRecordWithID(tableData))}
           />
-          {isEditing || <ExportButton data={exportData} />}
+          <ExportRecordsButton columnLabels={columnLabels} records={filteredData} />
         </section>
       </div>
-      <div className='flex h-full w-full min-w-[1080px] gap-4 pb-2 rounded-2xl'>
+      <div className='flex h-full w-full min-w-[840px] gap-12 pb-2 rounded-2xl'>
         <ControlTable data={tableData} columnLabels={columnLabels} getCells={memoizedGetCells} />
       </div>
     </div>
@@ -114,3 +103,5 @@ const ControlBoardPage = () => {
 }
 
 export default ControlBoardPage
+
+export { useIsRecordsSaving } from './model/use-save-editing'

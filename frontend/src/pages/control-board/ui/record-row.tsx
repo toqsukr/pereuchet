@@ -99,6 +99,7 @@ export const RecordRow = ({ record, control }: RecordRowProps<Record<string, TRe
         render={({ field, fieldState }) => (
           <Input
             {...field}
+            type='tel'
             className={classNames(
               'h-full! border-r-2 border-b-2 border-[var(--background-color)] bg-[var(--content-field-color)]! rounded-none! transition-colors',
               {

@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
       {
         element: (
           <AuthLoadingLayout>
-            <section className='fixed top-1/2 left-1/2 -translate-1/2 flex flex-col gap-8 max-w-[2560px] max-h-[856px] w-screen h-screen p-8 overflow-y-auto'>
+            <section className='fixed top-1/2 left-1/2 -translate-1/2 flex flex-col gap-6 max-w-[2560px] max-h-[856px] w-screen h-screen p-6 overflow-y-auto'>
               <div className='relative h-full w-full'>
                 <Outlet />
               </div>
