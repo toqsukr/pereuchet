@@ -12,7 +12,7 @@ import { arrayToRecordWithID } from '@shared/lib/transform'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useSaveEditing } from './model/use-save-editing'
+import { useSaveEditing } from './api/use-save-editing'
 import './styles.scss'
 import ExportRecordsButton from './ui/export-records-button'
 import { RecordRow } from './ui/record-row'
@@ -59,6 +59,7 @@ const ControlBoardPage = () => {
   const formSettings = useForm({
     mode: 'onChange',
     resolver: zodResolver(RecordFormSchema),
+    defaultValues: arrayToRecordWithID(tableData),
   })
 
   const memoizedControl = useMemo(() => formSettings.control, [formSettings.control])
@@ -104,4 +105,4 @@ const ControlBoardPage = () => {
 
 export default ControlBoardPage
 
-export { useIsRecordsSaving } from './model/use-save-editing'
+export { useIsRecordsSaving } from './api/use-save-editing'

@@ -74,5 +74,5 @@ export class MassUpdateRecordsDTO {
   @ValidateNested({ each: true }) // Валидируем каждый элемент массива
   @Type(() => RecordDTO) // Указываем тип элементов
   @ApiProperty({ type: [RecordDTO] }) // Уточняем для Swagger
-  records: RecordDTO[];
+  records: Omit<RecordDTO, 'date'>[];
 }

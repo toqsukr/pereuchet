@@ -30,7 +30,7 @@ export const recordService = {
       .then(({ data }) => RecordSchemaDTO.parse(data))
   },
 
-  async massUpdateRecords(records: RecordDTO[]) {
+  async massUpdateRecords(records: Omit<RecordDTO, 'date'>[]) {
     return authTemplate.put(`${RECORD_PREFIX}/mass-update`, { records })
   },
 
