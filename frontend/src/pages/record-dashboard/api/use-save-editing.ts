@@ -14,8 +14,9 @@ export const useSaveEditing = () => {
       const recordsToUpdate = serverRecords?.reduce((resultRecords, serverRecord) => {
         const clientRecord = data[serverRecord.id]
         if (equalRecords(serverRecord, clientRecord)) return resultRecords
-        return [...resultRecords, clientRecord]
-      }, [] as TRecord[])
+        const { createdAt, createdBy, editedAt, editedBy, ...rest } = clientRecord
+        return [...resultRecords, rest]
+      }, [] as Omit<TRecord, 'createdAt' | 'createdBy' | 'editedAt' | 'editedBy'>[])
 
       await recordService.massUpdateRecords(recordsToUpdate ?? [])
       await invalidateRecords()

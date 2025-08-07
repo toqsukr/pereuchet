@@ -1,7 +1,7 @@
 import { useProducts } from '@entities/product'
 import { useRecords } from '@entities/record'
 import { useWorkers } from '@entities/worker'
-import { useIsRecordsSaving } from '@pages/control-board'
+import { useIsRecordsSaving } from '@pages/record-dashboard'
 import Spinner from '@shared/uikit/spinner'
 import { type FC, type PropsWithChildren } from 'react'
 

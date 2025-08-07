@@ -1,4 +1,4 @@
-import ContentField from './content-field'
+import ContentField from './content-field/content-field'
 import Spinner from './spinner'
 
 const FieldLoader = () => {

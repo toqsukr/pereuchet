@@ -1,8 +1,8 @@
 import AddProductPage from '@pages/add-product'
 import AddWorkerPage from '@pages/add-worker'
 import AuthPage from '@pages/auth'
-import ControlBoardPage from '@pages/control-board'
 import HomePage from '@pages/home'
+import RecordDashboard from '@pages/record-dashboard'
 import { Routes } from '@shared/model/routes'
 import NavigationPanel from '@widgets/navigation-panel'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
@@ -26,14 +26,10 @@ export const router = createBrowserRouter([
       {
         element: (
           <AuthLoadingLayout>
-            <section className='fixed top-1/2 left-1/2 -translate-1/2 flex flex-col gap-6 max-w-[2560px] max-h-[856px] w-screen h-screen p-6 overflow-y-auto'>
-              <div className='relative h-full w-full'>
-                <Outlet />
-              </div>
-              <div className='w-full mx-auto'>
-                <NavigationPanel />
-              </div>
+            <section className='fixed top-1/2 left-1/2 -translate-1/2 max-w-[2500px] max-h-[856px] w-screen h-screen pt-6 pb-12 overflow-y-auto'>
+              <Outlet />
             </section>
+            <NavigationPanel />
           </AuthLoadingLayout>
         ),
         children: [
@@ -42,8 +38,8 @@ export const router = createBrowserRouter([
             element: <HomePage />,
           },
           {
-            path: Routes.CONTROL_BOARD,
-            element: <ControlBoardPage />,
+            path: Routes.RECORD_DASHBOARD,
+            element: <RecordDashboard />,
           },
           {
             path: Routes.ADD_WORKER,

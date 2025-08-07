@@ -8,9 +8,10 @@ export const useRecords = () => {
     queryKey: [RECORD_QUERY_KEY],
     queryFn: () =>
       recordService.getRecords().then(arr =>
-        arr.map(({ id, date, ...fields }) => ({
+        arr.map(({ id, createdAt, editedAt, ...fields }) => ({
           id,
-          date: date.toISOString().slice(0, -5),
+          createdAt: createdAt.toISOString().slice(0, -5),
+          editedAt: editedAt.toISOString().slice(0, -5),
           ...fields,
         }))
       ),

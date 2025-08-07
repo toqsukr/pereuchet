@@ -4,24 +4,31 @@ import dayjs, { Dayjs } from 'dayjs'
 import type { FC } from 'react'
 
 const styles: SxProps = {
-  '.css-vycme6-MuiPickersInputBase-root-MuiPickersOutlinedInput-root': {
-    height: '2.8rem',
-    width: '10.5rem',
-    color: 'white',
-    border: 0,
-    transition: 'box-shadow .2s',
-    WebkitBoxShadow: '0 0 0 2px rgba(255, 255, 255, .5)',
-    boxShadow: '0 0 0 2px rgba(255, 255, 255, .5)',
-    ':hover': {
-      WebkitBoxShadow: '0 0 0 2px rgba(255, 255, 255, .5)',
-      boxShadow: '0 0 0 2px white',
+  width: '100%',
+
+  '.MuiPickersSectionList-root.MuiPickersInputBase-sectionsContainer': {
+    width: '100%',
+  },
+  '.MuiPickersInputBase-root.MuiPickersOutlinedInput-root.MuiPickersInputBase-colorPrimary.MuiPickersInputBase-adornedEnd':
+    {
+      height: '2.8rem',
+      width: '100%',
+      color: 'white !important',
+      border: 0,
+      transition: 'box-shadow .2s',
+      WebkitBoxShadow: '0 0 0 2px rgba(255, 255, 255, .5) !important',
+      boxShadow: '0 0 0 2px rgba(255, 255, 255, .5) !important',
+      ':hover': {
+        WebkitBoxShadow: '0 0 0 2px rgba(255, 255, 255, .5) !important',
+        boxShadow: '0 0 0 2px white !important',
+      },
     },
-  },
-  '.css-1ysp02-MuiButtonBase-root-MuiIconButton-root': {
+  '.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-edgeEnd': {
     color: 'white',
   },
-  '.css-lqwr9g-MuiPickersOutlinedInput-notchedOutline': {
+  '.MuiPickersOutlinedInput-notchedOutline': {
     border: '0 !important',
+    width: '100%',
   },
 }
 type CalendarProp = {

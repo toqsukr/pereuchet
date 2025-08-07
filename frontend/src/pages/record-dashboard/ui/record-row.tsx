@@ -1,8 +1,8 @@
 import { useProductByCode, useProducts } from '@entities/product'
 import type { TRecord } from '@entities/record'
 import { useWorkers } from '@entities/worker'
-import { TableCell } from '@features/control-table'
 import { useEditRecords } from '@features/edit-records'
+import { TableCell } from '@features/editable-table'
 import Input from '@shared/uikit/input'
 import classNames from 'classnames'
 import { useMemo } from 'react'
@@ -43,7 +43,7 @@ export const RecordRow = ({ record, control }: RecordRowProps<Record<string, TRe
   )
 
   if (!isEditing)
-    return ['id', 'date', 'workerID', 'productCode', 'amount'].map(key => {
+    return Object.keys(record).map(key => {
       const recordKey = key as keyof TRecord
       return (
         <TableCell key={recordKey}>
@@ -64,9 +64,27 @@ export const RecordRow = ({ record, control }: RecordRowProps<Record<string, TRe
       />
       <Controller
         control={control}
-        name={`${record.id}.date`}
-        defaultValue={record.date}
-        render={() => <TableCell>{record.date}</TableCell>}
+        name={`${record.id}.createdAt`}
+        defaultValue={record.createdAt}
+        render={() => <TableCell>{record.createdAt}</TableCell>}
+      />
+      <Controller
+        control={control}
+        name={`${record.id}.createdBy`}
+        defaultValue={record.createdBy}
+        render={() => <TableCell>{record.createdBy}</TableCell>}
+      />
+      <Controller
+        control={control}
+        name={`${record.id}.editedAt`}
+        defaultValue={record.editedAt}
+        render={() => <TableCell>{record.editedAt}</TableCell>}
+      />
+      <Controller
+        control={control}
+        name={`${record.id}.editedBy`}
+        defaultValue={record.editedBy}
+        render={() => <TableCell>{record.editedBy}</TableCell>}
       />
       <Controller
         control={control}

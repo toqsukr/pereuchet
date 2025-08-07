@@ -34,7 +34,7 @@ export function Modal({ width = 'md', className, children, isOpen = false, onClo
           'bg-[var(--background-color)] rounded-lg min-h-[320px] mx-auto absolute top-1/2 left-1/2 -translate-1/2',
           'flex flex-col ',
           {
-            md: 'max-w-[640px] w-full',
+            md: 'max-w-[640px] max-[746px]:max-w-[320px] w-full',
             full: 'mx-5',
           }[width]
         )}>

@@ -13,7 +13,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ Button, className, ...
         ref={ref}
         autoComplete='off'
         className={cn(
-          'w-full h-[2.8rem] p-[0.8rem] font-bold rounded-[0.625rem] text-[var(--text-primary-color)] bg-[var(--background-color)] placeholder:text-[var(--text-third-color)] file:hidden disabled:opacity-50 truncate',
+          'w-full p-[0.8rem] text-base font-bold rounded-[0.625rem] text-[var(--text-primary-color)] bg-[var(--background-color)] placeholder:text-[var(--text-third-color)] file:hidden disabled:opacity-50 truncate',
           className,
           {
             ['pr-[3.6rem]']: !!Button,

@@ -1,0 +1,60 @@
+@reference 'tailwindcss';
+
+.navigation {
+  @apply flex flex-col fixed bottom-4 right-1/2 z-10 rounded-3xl overflow-auto;
+
+  transform: translate(50%, calc(100% - 1.2rem));
+
+  box-shadow: 0 0 16px 4px var(--background-color);
+  transition: transform 0.2s;
+
+  @media (height < 47rem /* 752px */) {
+    @apply bottom-1/2 right-4 flex-row;
+    transform: translate(calc(100% - 1.2rem), 50%);
+
+    &.shown {
+      transform: translateY(50%) !important;
+    }
+  }
+
+  &.shown {
+    transform: translateX(50%);
+  }
+}
+
+.route_list {
+  @apply flex h-full gap-6 p-6 pt-0 items-center  overflow-auto max-sm:gap-5;
+
+  background-color: var(--content-field-color);
+
+  @media (height < 47rem /* 752px */) {
+    @apply pt-6 pl-0;
+    flex-direction: column;
+  }
+}
+
+.toggle_container {
+  @apply flex justify-center items-center z-20 px-4 py-2;
+  background-color: var(--content-field-color);
+
+  @media (height < 47rem /* 752px */) {
+    @apply py-4 px-2;
+  }
+}
+
+.toggle_icon {
+  @apply w-5 h-5 transition-transform;
+  transform: rotate(180deg);
+
+  &.active {
+    transform: rotate(0deg);
+  }
+
+  @media (height < 47rem /* 752px */) {
+    transform: rotate(90deg);
+
+    &.active {
+      transform: rotate(-90deg);
+    }
+  }
+}

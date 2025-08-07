@@ -35,8 +35,10 @@ const ExportRecordsButton: FC<ExportRecordsButtonProps> = props => {
   const getProductByCode = useProductByCode()
   const exportFilter = useActiveFilter()
 
-  const preparedData = props.records?.map(({ productCode, amount, ...record }) => ({
-    ...record,
+  const preparedData = props.records?.map(({ id, createdAt, workerID, productCode, amount }) => ({
+    id,
+    createdAt,
+    workerID,
     productName: getProductByCode(productCode)?.name,
     amount,
   }))

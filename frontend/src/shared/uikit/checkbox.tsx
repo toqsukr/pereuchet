@@ -3,9 +3,8 @@ import type { SxProps } from '@mui/material/styles'
 import type { FC } from 'react'
 
 const style: SxProps = {
-  '.css-1umw9bq-MuiSvgIcon-root': {
-    color: 'white',
-  },
+  color: 'white !important',
+  padding: '0',
 }
 
 const Checkbox: FC<CheckboxProps> = props => {

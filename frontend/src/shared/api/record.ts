@@ -5,7 +5,10 @@ const RECORD_PREFIX = '/record'
 
 export const RecordSchemaDTO = z.object({
   id: z.coerce.number(),
-  date: z.coerce.date(),
+  createdAt: z.coerce.date(),
+  createdBy: z.string(),
+  editedAt: z.coerce.date(),
+  editedBy: z.string(),
   workerID: z.coerce.number().min(1),
   productCode: z.string().min(1),
   amount: z.coerce.number().positive().int().max(5000),
@@ -13,28 +16,30 @@ export const RecordSchemaDTO = z.object({
 
 type RecordDTO = z.infer<typeof RecordSchemaDTO>
 
+type UpdateRecordData = Pick<RecordDTO, 'workerID' | 'productCode' | 'amount'>
+
 export const recordService = {
   async getRecords() {
     return authTemplate.get(RECORD_PREFIX).then(({ data }) => RecordSchemaDTO.array().parse(data))
   },
 
-  async saveRecord(recordData: Omit<RecordDTO, 'id' | 'date'>) {
+  async saveRecord(recordData: UpdateRecordData) {
     return authTemplate
       .post(RECORD_PREFIX, recordData)
       .then(({ data }) => RecordSchemaDTO.parse(data))
   },
 
-  async updateRecord(recordData: Omit<RecordDTO, 'id' | 'date'>) {
+  async updateRecord(recordData: UpdateRecordData) {
     return authTemplate
       .put(RECORD_PREFIX, recordData)
       .then(({ data }) => RecordSchemaDTO.parse(data))
   },
 
-  async massUpdateRecords(records: Omit<RecordDTO, 'date'>[]) {
+  async massUpdateRecords(records: (Pick<RecordDTO, 'id'> & UpdateRecordData)[]) {
     return authTemplate.put(`${RECORD_PREFIX}/mass-update`, { records })
   },
 
-  async deleteRecord(id: number) {
+  async deleteRecord(id: Pick<RecordDTO, 'id'>['id']) {
     return authTemplate.delete(RECORD_PREFIX, { params: { id } })
   },
 } as const

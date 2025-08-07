@@ -8,15 +8,16 @@ type CellSelectProps = HTMLProps<HTMLSelectElement> & {
 
 export const CellSelect: FC<CellSelectProps> = memo(({ options, className, ...props }) => {
   return (
-    <Select
-      {...props}
+    <div
       className={classNames(
-        'h-full! border-r-2 border-b-2 border-[var(--background-color)] bg-[var(--content-field-color)]! rounded-none!',
+        'overflow-auto flex flex-col justify-center items-center border-r-2 border-b-2 border-[var(--background-color)]',
         className
       )}>
-      {options?.map((props, idx) => (
-        <Select.Option {...props} key={idx} />
-      ))}
-    </Select>
+      <Select {...props} className={classNames('bg-transparent! rounded-none!')}>
+        {options?.map((props, idx) => (
+          <Select.Option {...props} key={idx} />
+        ))}
+      </Select>
+    </div>
   )
 })

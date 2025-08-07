@@ -1,6 +1,9 @@
 export type TRecord = {
   id: number
-  date: string
+  createdAt: string
+  createdBy: string
+  editedAt: string
+  editedBy: string
   workerID: number
   productCode: string
   amount: number

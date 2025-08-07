@@ -12,8 +12,8 @@ export const TableCell: FC<PropsWithChildren<TableCellProp>> = props => {
     <div
       {...rest}
       className={cn(
-        'bg-[var(--content-field-color)] p-4 border-r-2 border-b-2 border-[var(--background-color)]!',
-        { ['bg-[#2f3447]!']: isLabel },
+        'bg-[var(--content-field-color)] flex items-center p-3.5 border-r-2 border-b-2 border-[var(--background-color)]!',
+        { ['bg-[#2f3447]! justify-center']: isLabel },
         className
       )}>
       {children}

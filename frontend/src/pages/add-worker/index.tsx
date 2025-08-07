@@ -1,10 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import Button from '@shared/uikit/button/button'
-import ContentField from '@shared/uikit/content-field'
+import ContentField from '@shared/uikit/content-field/content-field'
 import Input from '@shared/uikit/input'
 import { Controller, useForm } from 'react-hook-form'
 import z from 'zod'
 import { useAddWorker } from './api/use-add-worker'
+import css from './style.module.scss'
 
 const WorkerSchemaDTO = z.object({
   id: z.coerce.number().min(1),
@@ -35,7 +36,7 @@ const AddWorkerPage = () => {
   }
 
   return (
-    <div className='w-full max-w-[576px] min-w-[285px] absolute top-1/3 left-1/2 -translate-1/2 p-8'>
+    <div className={css.worker_page}>
       <ContentField title={'Добавление штамповщика'}>
         <form onSubmit={e => e.preventDefault()} className='flex flex-col gap-4'>
           <Controller

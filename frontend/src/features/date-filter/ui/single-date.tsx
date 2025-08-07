@@ -12,8 +12,8 @@ const SingleDate: FC<{ onPick?: () => void }> = ({ onPick }) => {
   }
 
   return (
-    <div className='flex items-center gap-2'>
-      <label className='px-2'>Дата: </label>
+    <div className='flex items-center gap-4'>
+      <label className='min-w-[1.5rem]'>Дата: </label>
       <Calendar filter={filter} updateFilter={handlePick} />
     </div>
   )

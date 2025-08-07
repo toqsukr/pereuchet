@@ -1,12 +1,15 @@
-.select {
-  width: 100%;
-  height: 2.8rem;
-  padding: 0.8rem;
-  font-weight: bold;
+@reference "tailwindcss";
+
+.container {
+  @apply w-full relative;
   border-radius: 0.625rem;
   color: var(--text-primary-color);
   background-color: var(--background-color);
+}
 
+.select {
+  @apply w-full truncate font-bold text-base p-3.5;
+  padding-right: 2.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -14,17 +17,22 @@
   &::placeholder {
     color: var(--text-third-color);
   }
-  &::picker-icon {
-    color: white;
-    margin-right: 2px;
-    content: url('/arrow.svg');
-    transition: transform 0.4s;
-  }
+
   &:open {
     &::picker-icon {
       transform: rotate(180deg);
     }
   }
 
-  appearance: base-select;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.option {
+  @apply text-white font-medium truncate;
+  background-color: var(--content-field-color);
+}
+
+.picker_icon {
+  @apply absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none;
 }

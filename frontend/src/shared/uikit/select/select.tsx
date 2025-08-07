@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import type { FC, HTMLProps, PropsWithChildren } from 'react'
+import { type FC, type HTMLProps, type PropsWithChildren } from 'react'
 import css from './select.module.scss'
 
 const Option: FC<PropsWithChildren<HTMLProps<HTMLOptionElement>>> = ({
@@ -8,7 +8,7 @@ const Option: FC<PropsWithChildren<HTMLProps<HTMLOptionElement>>> = ({
   ...props
 }) => {
   return (
-    <option {...props} className={cn('text-white font-medium p-4 truncate', className)}>
+    <option {...props} className={cn(css.option, className)}>
       {children}
     </option>
   )
@@ -20,9 +20,14 @@ const Select = ({
   ...props
 }: PropsWithChildren<HTMLProps<HTMLSelectElement>>) => {
   return (
-    <select {...props} className={cn(css.select, className)}>
-      {children}
-    </select>
+    <div className={cn(css.container, className)}>
+      <select {...props} className={css.select}>
+        {children}
+      </select>
+      <div className={css.picker_icon}>
+        <img src='/arrow.svg' className='w-4 h-4' />
+      </div>
+    </div>
   )
 }
 

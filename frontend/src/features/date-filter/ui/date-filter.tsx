@@ -13,8 +13,8 @@ export const DateFilter: FC<{ onPick?: () => void }> = ({ onPick }) => {
   }
 
   return (
-    <section className='flex w-full justify-between bg-[var(--content-field-color)] p-4 rounded-2xl'>
-      <div className='flex items-center' onClick={handleCheck}>
+    <section className='flex shrink-1 w-full gap-4 justify-between bg-[var(--content-field-color)] p-4 rounded-2xl max-[880px]:flex-col max-[880px]:justify-start'>
+      <div className='flex items-center gap-4 py-2' onClick={handleCheck}>
         <Checkbox checked={isPeriod} />
         <label>За период</label>
       </div>

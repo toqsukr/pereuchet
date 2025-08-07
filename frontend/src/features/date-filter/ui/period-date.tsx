@@ -14,17 +14,17 @@ const PeriodDate: FC<{ onPick?: () => void }> = ({ onPick }) => {
   }
 
   return (
-    <section className='flex gap-4'>
-      <div className='flex items-center gap-2'>
-        <label className='px-2'>От:</label>
+    <section className='flex gap-4 max-[786px]:flex-col'>
+      <div className='w-full flex items-center gap-4'>
+        <label className='min-w-[1.5rem]'>От:</label>
         <Calendar
           filter={filter && filter[0]}
           updateFilter={value => handlePick([value, filter && filter[1]])}
           maxDate={filter && filter[1] ? dayjs(filter[1]) : undefined}
         />
       </div>
-      <div className='flex items-center gap-2'>
-        <label className='px-2'>До:</label>
+      <div className='w-full flex items-center gap-4'>
+        <label className='min-w-[1.5rem]'>До:</label>
         <Calendar
           filter={filter && filter[1]}
           updateFilter={value => handlePick([filter && filter[0], value])}

@@ -1,5 +1,6 @@
 import type { FC, PropsWithChildren, ReactNode } from 'react'
 import { IoArrowBackOutline } from 'react-icons/io5'
+import css from './content-field.module.scss'
 
 type HeaderWithIconProps = { icon: ReactNode; text: string }
 
@@ -16,9 +17,9 @@ type ContentFieldProps = { title?: ReactNode; onBack?: () => void }
 
 const ContentField = ({ children, title, onBack }: PropsWithChildren<ContentFieldProps>) => {
   return (
-    <section className='h-full text-white bg-[var(--content-field-color)] p-6 rounded-[1rem]'>
+    <section className={css.content_field}>
       {title && (
-        <header style={{ lineHeight: '2rem' }} className='text-[1.3rem] font-bold mb-[1.5rem]'>
+        <header className={css.header}>
           <div className='flex items-center gap-5'>
             {onBack && <IoArrowBackOutline className='cursor-pointer' onClick={onBack} />}
             <span className='flex-1 truncate'>{title}</span>
