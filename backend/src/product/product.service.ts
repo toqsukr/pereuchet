@@ -27,9 +27,9 @@ export class ProductService {
 
   async getProducts() {
     this.logger.log('Fetching all products');
-    const products = (await this.prisma.product.findMany()).sort((a, b) =>
-      a.name > b.name ? 1 : -1,
-    );
+    const products = await this.prisma.product.findMany({
+      orderBy: { name: 'asc' },
+    });
     return JSON.stringify(products);
   }
 

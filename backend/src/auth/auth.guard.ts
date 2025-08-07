@@ -12,8 +12,8 @@ export class AuthGuard implements CanActivate {
     const verifyFn = function () {
       return this.jwtService.verifyAsync;
     };
-    const payload = await JwtHelper.verifyToken(token, verifyFn.bind(this));
-    request['user'] = payload;
+    await JwtHelper.verifyToken(token, verifyFn.bind(this));
+
     return true;
   }
 }

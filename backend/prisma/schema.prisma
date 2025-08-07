@@ -14,23 +14,42 @@ model Product {
   records Record[]
 }
 
-model Admin {
-  login String @id @unique
-  hash  String
-}
-
 model Worker {
   id      Int      @id @unique
   name    String
   records Record[]
 }
 
+model Admin {
+  login           String         @id @unique
+  hash            String
+  createdRecords  Record[]       @relation("CreatorRecords")
+  changnedRecords RecordChange[] @relation("ChangerRecords")
+}
+
 model Record {
-  id          Int      @id @unique @default(autoincrement())
-  date        DateTime
+  id          Int            @id @default(autoincrement())
+  createdAt   DateTime
+  createdBy   String
   amount      Int
   workerID    Int
   productCode String
-  worker      Worker   @relation(fields: [workerID], references: [id])
-  product     Product  @relation(fields: [productCode], references: [code])
+  isDeleted   Boolean        @default(false)
+  edits       RecordChange[]
+  worker      Worker         @relation(fields: [workerID], references: [id])
+  product     Product        @relation(fields: [productCode], references: [code])
+  creator     Admin          @relation("CreatorRecords", fields: [createdBy], references: [login])
+}
+
+model RecordChange {
+  id          Int      @id @default(autoincrement())
+  recordId    Int
+  action      String // 'CREATED' | 'EDITED' | 'DELETED'
+  amount      Int
+  workerID    Int
+  productCode String
+  changedBy   String
+  changedAt   DateTime @default(now())
+  record      Record   @relation(fields: [recordId], references: [id])
+  changer     Admin    @relation("ChangerRecords", fields: [changedBy], references: [login])
 }

@@ -8,8 +8,10 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import { FastifyRequest } from 'fastify';
 import { AuthGuard } from 'src/auth/auth.guard';
 import {
   CreateRecordDTO,
@@ -35,32 +37,44 @@ export class RecordController {
 
   @Post()
   @HttpCode(201)
-  createRecord(@Body() recordDTO: CreateRecordDTO) {
+  createRecord(
+    @Body() recordDTO: CreateRecordDTO,
+    @Req() request: FastifyRequest,
+  ) {
     this.logger.debug(`POST /record - Attempting to create record (sanitized)`);
-    return this.recordService.createRecord(recordDTO);
+    return this.recordService.createRecord(recordDTO, request);
   }
 
   @Put()
   @HttpCode(201)
   @UseGuards(AuthGuard)
-  updateRecord(@Body() recordDTO: UpdateRecordDTO) {
+  updateRecord(
+    @Body() recordDTO: UpdateRecordDTO,
+    @Req() request: FastifyRequest,
+  ) {
     this.logger.warn(`PUT /record - Updating record ID: ${recordDTO.id}`);
-    return this.recordService.updateRecord(recordDTO);
+    return this.recordService.updateRecord(recordDTO, request);
   }
 
   @Put('/mass-update')
   @HttpCode(201)
   @UseGuards(AuthGuard)
-  massUpdateRecords(@Body() body: MassUpdateRecordsDTO) {
+  massUpdateRecords(
+    @Body() body: MassUpdateRecordsDTO,
+    @Req() request: FastifyRequest,
+  ) {
     this.logger.warn(`PUT /record/mass-update - Mass records updating`);
-    return this.recordService.massUpdateRecords(body.records);
+    return this.recordService.massUpdateRecords(body.records, request);
   }
 
   @Delete()
   @HttpCode(201)
   @UseGuards(AuthGuard)
-  deleteRecord(@Query() query: DeleteRecordDTO) {
+  deleteRecord(
+    @Query() query: DeleteRecordDTO,
+    @Req() request: FastifyRequest,
+  ) {
     this.logger.warn(`DELETE /record - Deleting record ID: ${query.id}`);
-    return this.recordService.deleteRecord(query.id);
+    return this.recordService.deleteRecord(query.id, request);
   }
 }

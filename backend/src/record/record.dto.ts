@@ -2,10 +2,8 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
-  IsDate,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsPositive,
   IsString,
   ValidateNested,
@@ -38,41 +36,35 @@ export class DeleteRecordDTO {
 }
 
 export class UpdateRecordDTO extends DeleteRecordDTO {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @ApiPropertyOptional()
-  productCode?: string;
+  productCode: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   @ApiPropertyOptional()
-  workerID?: number;
+  workerID: number;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   @ApiPropertyOptional()
-  amount?: number;
+  amount: number;
 }
 
-export class RecordDTO extends CreateRecordDTO {
+export class MassUpdateRecord extends CreateRecordDTO {
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
   @Transform(({ value }) => parseInt(value, 10))
   id: number;
-
-  @IsDate()
-  @IsNotEmpty()
-  @ApiProperty()
-  @Transform(({ value }) => new Date(value))
-  date: Date;
 }
 
 export class MassUpdateRecordsDTO {
   @IsArray()
   @ValidateNested({ each: true }) // Валидируем каждый элемент массива
-  @Type(() => RecordDTO) // Указываем тип элементов
-  @ApiProperty({ type: [RecordDTO] }) // Уточняем для Swagger
-  records: Omit<RecordDTO, 'date'>[];
+  @Type(() => MassUpdateRecord) // Указываем тип элементов
+  @ApiProperty({ type: [MassUpdateRecord] }) // Уточняем для Swagger
+  records: MassUpdateRecord[];
 }
