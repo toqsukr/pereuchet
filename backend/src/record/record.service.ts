@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Prisma } from '@prisma/client';
 import { FastifyRequest } from 'fastify';
 import { JwtHelper } from 'src/auth/auth.helper';
 import { PrismaService } from 'src/prisma.service';
@@ -123,38 +124,48 @@ export class RecordService {
     });
   }
 
-  async updateRecord(recordData: UpdateRecordDTO, request: FastifyRequest) {
+  async updateRecord(
+    recordData: UpdateRecordDTO,
+    request: FastifyRequest,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const client = tx ?? this.prisma;
     const editor = this.defineActor(request);
-
-    this.logger.warn(`Updating record ID: ${recordData.id} by ${editor}`);
+    this.logger.warn(
+      `Обновление записи ID: ${recordData.id} пользователем ${editor}`,
+    );
 
     if (recordData.productCode) {
-      this.logger.debug(`Validating product code: ${recordData.productCode}`);
+      this.logger.debug(`Проверка кода продукта: ${recordData.productCode}`);
       await this.product.getProductByCode(recordData.productCode);
     }
-
     if (recordData.workerID) {
-      this.logger.debug(`Validating worker ID: ${recordData.workerID}`);
+      this.logger.debug(`Проверка ID работника: ${recordData.workerID}`);
       await this.worker.getWorkerByID(recordData.workerID);
     }
 
     const foundRecord = await this.getRecordByID(recordData.id);
+    if (!foundRecord) {
+      this.logger.error(
+        `Обновление не удалось: запись ID ${recordData.id} не найдена`,
+      );
+      throw new HttpException(
+        `Запись с ID ${recordData.id} не найдена!`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
 
-    const { id, amount, productCode, workerID } = foundRecord;
+    const { id, ...rest } = recordData;
 
-    const updatedRecord = await this.prisma.record.update({
-      where: { id: recordData.id },
-      data: {
-        id,
-        amount: recordData.amount ?? amount,
-        productCode: recordData.productCode ?? productCode,
-        workerID: recordData.workerID ?? workerID,
-      },
+    const updatedRecord = await client.record.update({
+      where: { id },
+      data: rest,
     });
+    this.logger.log(`Запись успешно обновлена: ID ${id}`);
 
-    const recordChange = await this.prisma.recordChange.create({
+    const { changedAt, changedBy } = await client.recordChange.create({
       data: {
-        ...recordData,
+        ...rest,
         recordId: updatedRecord.id,
         action: this.actions.EDITED,
         changedBy: editor,
@@ -162,81 +173,63 @@ export class RecordService {
       },
     });
 
-    this.logger.log(`Record updated successfully: ID ${updatedRecord.id}`);
-    return JSON.stringify({
-      ...updatedRecord,
-      editedAt: recordChange.changedAt,
-      editedBy: recordChange.changedBy,
+    return { ...updatedRecord, editedBy: changedBy, editedAt: changedAt };
+  }
+
+  async deleteRecord(
+    id: number,
+    request: FastifyRequest,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const client = tx ?? this.prisma;
+    const remover = this.defineActor(request);
+    this.logger.warn(`${remover} пытается удалить запись с ID: ${id}`);
+
+    const foundRecord = await client.record.findUnique({ where: { id } });
+    if (!foundRecord) {
+      this.logger.error(`Удаление не удалось: запись ID ${id} не найдена`);
+      throw new HttpException(
+        `Запись с ID ${id} не найдена!`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const record = await client.record.update({
+      where: { id },
+      select: { amount: true, productCode: true, workerID: true },
+      data: { isDeleted: true },
     });
+
+    await client.recordChange.create({
+      data: {
+        ...record,
+        recordId: id,
+        changedBy: remover,
+        changedAt: RecordService.getLocaltime(),
+        action: this.actions.DELETED,
+      },
+    });
+
+    this.logger.log(`Запись успешно удалена: ID ${id}`);
+    return 'Success!';
   }
 
   async massUpdateRecords(
     records: MassUpdateRecordsDTO['records'],
     request: FastifyRequest,
   ) {
-    await Promise.all(
-      records.map(async (record) => {
-        if (record.productCode)
-          await this.product.getProductByCode(record.productCode);
-        if (record.workerID) await this.worker.getWorkerByID(record.workerID);
-        await this.getRecordByID(record.id);
-      }),
-    );
-
-    const editor = this.defineActor(request);
-
     return this.prisma.$transaction(async (tx) => {
-      const updates = records.map(async (record) => {
-        const { id, ...rest } = record;
-        this.logger.warn(`Updating record ID: ${id} by ${editor}`);
-
-        await tx.record.update({
-          where: { id },
-          data: rest,
-        });
-
-        return tx.recordChange.create({
-          data: {
-            ...rest,
-            recordId: id,
-            changedBy: editor,
-            changedAt: RecordService.getLocaltime(),
-            action: this.actions.EDITED,
-          },
-        });
-      });
-      await Promise.all(updates);
+      for await (const { isDeleted, ...record } of records) {
+        if (isDeleted) {
+          await this.deleteRecord(record.id, request, tx);
+        } else {
+          await this.updateRecord(record, request, tx);
+        }
+      }
+      this.logger.log(
+        `Массовое обновление завершено пользователем ${this.defineActor(request)}`,
+      );
       return 'Success!';
     });
-  }
-
-  async deleteRecord(id: number, request: FastifyRequest) {
-    const remover = this.defineActor(request);
-    this.logger.warn(`${remover} attemptes deleting record with ID: ${id}`);
-    const foundRecord = await this.prisma.record.findUnique({ where: { id } });
-
-    if (!foundRecord) {
-      this.logger.error(`Delete failed: record ID ${id} not found`);
-      throw new HttpException(
-        `Запись с номером ${id} не найдена!`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
-    const record = await this.prisma.record.update({
-      where: { id },
-      select: { amount: true, productCode: true, workerID: true },
-      data: { isDeleted: true },
-    });
-
-    await this.prisma.recordChange.create({
-      data: {
-        ...record,
-        recordId: id,
-        changedBy: remover,
-        action: this.actions.DELETED,
-      },
-    });
-    this.logger.log(`Record deleted successfully: ID ${id}`);
-    return 'Success!';
   }
 }

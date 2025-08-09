@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsPositive,
@@ -53,12 +54,19 @@ export class UpdateRecordDTO extends DeleteRecordDTO {
   amount: number;
 }
 
-export class MassUpdateRecord extends CreateRecordDTO {
+export class TRecord extends CreateRecordDTO {
   @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
   @Transform(({ value }) => parseInt(value, 10))
   id: number;
+}
+
+export class MassUpdateRecord extends TRecord {
+  @IsBoolean()
+  @IsNotEmpty()
+  @ApiProperty()
+  isDeleted: boolean;
 }
 
 export class MassUpdateRecordsDTO {
