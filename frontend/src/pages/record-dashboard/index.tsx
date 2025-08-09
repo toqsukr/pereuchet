@@ -24,7 +24,7 @@ const tableLabels = [
 ] as const
 
 const columnSizes = {
-  0: { min: '3.5rem', max: '4.5rem' },
+  0: { min: '8rem', max: '8.5rem' },
   1: { min: '12rem', max: '28rem' },
   2: { min: '7rem', max: '10rem' },
   3: { min: '12rem', max: '28rem' },
@@ -43,6 +43,7 @@ const RecordFormSchema = z.record(
     editedBy: z.string(),
     workerID: z.coerce.number().min(1),
     productCode: z.string().min(1),
+    isDeleted: z.boolean(),
     amount: z.coerce.number().positive().int().max(5000),
   })
 )
@@ -60,28 +61,38 @@ const RecordDashboard = () => {
     }
   }, [])
 
-  const tableData = useTableRecords(filteredData)
-
   const formSettings = useForm({
     mode: 'onChange',
     resolver: zodResolver(RecordFormSchema),
-    defaultValues: arrayToRecordWithID(tableData),
+    defaultValues: arrayToRecordWithID(filteredData),
   })
 
+  const tableData = useTableRecords(filteredData)
+
   const memoizedControl = useMemo(() => formSettings.control, [formSettings.control])
+  const memoizedSetFormState = useCallback(formSettings.setValue, [formSettings.setValue])
 
   const memoizedGetCells = useCallback(
-    (_row: number, value: TRecord) => (
-      <RecordRow key={value.id} record={value} control={memoizedControl} />
+    (_row: number, value: Omit<TRecord, 'isDeleted'>) => (
+      <RecordRow
+        key={value.id}
+        record={value}
+        control={memoizedControl}
+        setFormState={memoizedSetFormState}
+      />
     ),
-    [memoizedControl]
+    [memoizedControl, memoizedSetFormState, formSettings]
   )
 
   return (
     <div className='flex flex-col gap-4 w-full h-full justify-self-center max-w-[1650px] px-6'>
       <div className='w-full flex gap-4'>
         <DateFilter />
-        <ControlPanel formSettings={formSettings} exportData={filteredData} tableData={tableData} />
+        <ControlPanel
+          formSettings={formSettings}
+          exportData={filteredData}
+          tableData={filteredData}
+        />
       </div>
       <div className='flex h-full w-full gap-12 pb-2 rounded-2xl'>
         <EditableTable

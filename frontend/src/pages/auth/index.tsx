@@ -9,6 +9,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { useLogin } from './api/use-login'
+import css from './style.module.scss'
 
 const AuthPage = () => {
   const navigate = useNavigate()
@@ -32,13 +33,13 @@ const AuthPage = () => {
   const onSubmit = async (formData: { login: string; password: string }) => {
     await signIn(formData)
     queryClient.clear()
-    navigate(Routes.HOME)
+    navigate(Routes.ADD_PRODUCT)
   }
 
-  if (isAuthorized) return <Navigate to={Routes.HOME} />
+  if (isAuthorized) return <Navigate to={Routes.ADD_PRODUCT} />
 
   return (
-    <section className='w-full max-w-[576px] min-w-[285px] absolute top-1/3 left-1/2 -translate-1/2 p-8 flex justify-center items-center'>
+    <section className={css.auth_page}>
       <ContentField title='Вход в аккаунт'>
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
           <Controller

@@ -92,19 +92,28 @@ const TableItem = <TData extends object, TLabel extends readonly string[]>(
   const { itemIndex, objectData, getCells, columnSizes } = props
   const defineCellFn = getCells ?? getCellsDefault
 
+  if (objectData instanceof Array)
+    return (
+      <div
+        className='grid h-full w-full'
+        style={{
+          gridTemplateColumns: defineColumns(objectData, columnSizes),
+        }}>
+        {objectData.map(value => (
+          <TableCell isLabel key={value}>
+            {value}
+          </TableCell>
+        ))}
+      </div>
+    )
+
   return (
     <div
       className='grid h-full w-full'
       style={{
         gridTemplateColumns: defineColumns(objectData, columnSizes),
       }}>
-      {objectData instanceof Array
-        ? objectData.map(value => (
-            <TableCell isLabel key={value}>
-              {value}
-            </TableCell>
-          ))
-        : defineCellFn(itemIndex, objectData)}
+      {defineCellFn(itemIndex, objectData)}
     </div>
   )
 }

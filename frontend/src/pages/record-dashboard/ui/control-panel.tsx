@@ -31,7 +31,7 @@ const ControlPanel = (props: ControlPanelProps<Record<string, TRecord>>) => {
       <ConfirmChangesButton
         disabled={!formSettings.formState.isValid}
         fieldChanged={formSettings.formState.isDirty}
-        onConfirm={formSettings.handleSubmit(onValidSubmit)}
+        onConfirm={formSettings.handleSubmit(onValidSubmit, errors => console.log(errors))}
         onCancel={() => formSettings.reset(arrayToRecordWithID(tableData))}
       />
       <CancelChangesButton onCancel={() => formSettings.reset(arrayToRecordWithID(tableData))} />

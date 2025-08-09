@@ -1,38 +1,43 @@
+import { useProducts } from '@entities/product'
+import { useInvalidateRecords } from '@entities/record'
+import { useWorkers } from '@entities/worker'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Button from '@shared/uikit/button/button'
 import ContentField from '@shared/uikit/content-field/content-field'
 import Input from '@shared/uikit/input'
+import Select from '@shared/uikit/select/select'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useSaveRecord } from './model/use-save-record'
 import css from './style.module.scss'
-import { useAddProduct } from './ui/use-add-product'
 
-const ProductSchemaDTO = z.object({
-  code: z
-    .string()
-    .min(1)
-    .transform(val => val.trim()),
-  name: z
-    .string()
-    .min(1)
-    .transform(val => val.trim()),
+const FormSchemaDTO = z.object({
+  workerID: z.coerce.number().min(1),
+  productCode: z.string().min(1),
+  amount: z.coerce.number().positive().int().max(5000),
 })
 
-const AddProductPage = () => {
-  const { mutateAsync: addProduct } = useAddProduct()
-  const { control, formState, reset, handleSubmit } = useForm({
+const HomePage = () => {
+  const { data: workers } = useWorkers()
+  const { data: products } = useProducts()
+  const { mutateAsync: saveRecord } = useSaveRecord()
+  const invalidateRecords = useInvalidateRecords()
+  const { control, formState, resetField, handleSubmit } = useForm({
     mode: 'onChange',
     defaultValues: {
-      code: undefined,
-      name: undefined,
+      amount: undefined,
+      productCode: undefined,
+      workerID: undefined,
     },
-    resolver: zodResolver(ProductSchemaDTO),
+    resolver: zodResolver(FormSchemaDTO),
   })
 
-  const handleSaveProduct = async (data: z.infer<typeof ProductSchemaDTO>) => {
+  const handleSaveProduct = async (data: z.infer<typeof FormSchemaDTO>) => {
     try {
-      await addProduct(data)
-      reset()
+      await saveRecord(data)
+      invalidateRecords()
+      resetField('amount')
+      resetField('productCode')
     } catch (e) {
       alert('Saving error!')
     }
@@ -40,19 +45,47 @@ const AddProductPage = () => {
 
   return (
     <div className={css.product_page}>
-      <ContentField title={'Добавление подошвы'}>
+      <ContentField title={'Добавление продукта'}>
         <form onSubmit={e => e.preventDefault()} className='flex flex-col gap-4'>
           <Controller
-            name='code'
+            name='workerID'
             control={control}
             render={({ field }) => (
-              <Input {...field} value={field.value ?? ''} placeholder='Уникальный код' />
+              <Select {...field} value={field.value ?? ''}>
+                <Select.Option value={''}>Выберите ваш ID</Select.Option>
+                {workers?.map(({ id }) => (
+                  <Select.Option key={id} value={id}>
+                    {id}
+                  </Select.Option>
+                ))}
+              </Select>
             )}
           />
           <Controller
-            name='name'
+            name='productCode'
             control={control}
-            render={({ field }) => <Input {...field} value={field.value ?? ''} placeholder='Имя' />}
+            render={({ field }) => (
+              <Select {...field} value={field.value ?? ''}>
+                <Select.Option value={''}>Выберите продукт</Select.Option>
+                {products?.map(({ name, code }) => (
+                  <Select.Option key={code} value={code}>
+                    {name}
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
+          />
+          <Controller
+            name='amount'
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                value={field.value ?? ''}
+                placeholder='Количество коробок'
+                type='tel'
+              />
+            )}
           />
           <Button onClick={handleSubmit(handleSaveProduct)} disabled={!formState.isValid}>
             Сохранить
@@ -63,4 +96,4 @@ const AddProductPage = () => {
   )
 }
 
-export default AddProductPage
+export default HomePage

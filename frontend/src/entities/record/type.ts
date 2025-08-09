@@ -5,6 +5,7 @@ export type TRecord = {
   editedAt: string
   editedBy: string
   workerID: number
+  isDeleted: boolean
   productCode: string
   amount: number
 }

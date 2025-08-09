@@ -1,11 +1,11 @@
 import AddProductPage from '@pages/add-product'
+import AddTreatPage from '@pages/add-tread'
 import AddWorkerPage from '@pages/add-worker'
 import AuthPage from '@pages/auth'
-import HomePage from '@pages/home'
 import RecordDashboard from '@pages/record-dashboard'
 import { Routes } from '@shared/model/routes'
 import NavigationPanel from '@widgets/navigation-panel'
-import { createBrowserRouter, Outlet } from 'react-router-dom'
+import { createBrowserRouter, Outlet, redirect } from 'react-router-dom'
 import AuthLoadingLayout from './auth-loading-layout'
 import LoadingLayout from './loading-layout'
 import { QueryErrorBoundary } from './query-error-boundary'
@@ -13,6 +13,9 @@ import { QueryErrorBoundary } from './query-error-boundary'
 export const router = createBrowserRouter([
   {
     path: Routes.HOME,
+    loader: () => redirect(Routes.ADD_PRODUCT),
+  },
+  {
     element: (
       <QueryErrorBoundary>
         <div className='w-full'>
@@ -34,8 +37,8 @@ export const router = createBrowserRouter([
         ),
         children: [
           {
-            index: true,
-            element: <HomePage />,
+            path: Routes.ADD_PRODUCT,
+            element: <AddProductPage />,
           },
           {
             path: Routes.RECORD_DASHBOARD,
@@ -46,8 +49,8 @@ export const router = createBrowserRouter([
             element: <AddWorkerPage />,
           },
           {
-            path: Routes.ADD_PRODUCT,
-            element: <AddProductPage />,
+            path: Routes.ADD_TREAT,
+            element: <AddTreatPage />,
           },
         ],
       },

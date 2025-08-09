@@ -12,6 +12,7 @@ export const useRecords = () => {
           id,
           createdAt: createdAt.toISOString().slice(0, -5),
           editedAt: editedAt.toISOString().slice(0, -5),
+          isDeleted: false,
           ...fields,
         }))
       ),

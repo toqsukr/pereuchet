@@ -1,5 +1,5 @@
 import Select from '@shared/uikit/select/select'
-import classNames from 'classnames'
+import cn from 'classnames'
 import { memo, type FC, type HTMLProps, type PropsWithChildren } from 'react'
 
 type CellSelectProps = HTMLProps<HTMLSelectElement> & {
@@ -9,11 +9,11 @@ type CellSelectProps = HTMLProps<HTMLSelectElement> & {
 export const CellSelect: FC<CellSelectProps> = memo(({ options, className, ...props }) => {
   return (
     <div
-      className={classNames(
+      className={cn(
         'overflow-auto flex flex-col justify-center items-center border-r-2 border-b-2 border-[var(--background-color)]',
         className
       )}>
-      <Select {...props} className={classNames('bg-transparent! rounded-none!')}>
+      <Select {...props} className={cn('bg-transparent! rounded-none!', className)}>
         {options?.map((props, idx) => (
           <Select.Option {...props} key={idx} />
         ))}

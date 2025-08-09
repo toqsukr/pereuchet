@@ -21,11 +21,25 @@ const Select = ({
 }: PropsWithChildren<HTMLProps<HTMLSelectElement>>) => {
   return (
     <div className={cn(css.container, className)}>
-      <select {...props} className={css.select}>
+      <select {...props} className={cn(css.select, className)}>
         {children}
       </select>
       <div className={css.picker_icon}>
-        <img src='/arrow.svg' className='w-4 h-4' />
+        <svg
+          className='w-4 h-4'
+          width='13'
+          height='6'
+          viewBox='0 0 13 6'
+          fill='none'
+          xmlns='http://www.w3.org/2000/svg'>
+          <path
+            d='M1 1L6.5 5L12 1'
+            stroke='currentColor'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+          />
+        </svg>
       </div>
     </div>
   )

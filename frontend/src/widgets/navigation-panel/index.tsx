@@ -11,10 +11,10 @@ import { useNavigationMenu } from './model/store'
 import css from './style.module.scss'
 import { NavigationLink } from './ui/navigation-link'
 
-const names: Record<Exclude<Path, 'AUTH'>, ReactNode> = {
-  HOME: <FiEdit className='w-6 h-6 scale-110' />,
+const names: Record<Exclude<Path, 'AUTH' | 'HOME'>, ReactNode> = {
+  ADD_PRODUCT: <FiEdit className='w-6 h-6 scale-110' />,
   RECORD_DASHBOARD: <BsTable className='w-6 h-6' />,
-  ADD_PRODUCT: <GiSlippers className='w-6 h-6' />,
+  ADD_TREAT: <GiSlippers className='w-6 h-6' />,
   ADD_WORKER: <IoPersonAdd className='w-6 h-6' />,
 }
 
@@ -29,9 +29,9 @@ const NavigationPanel = () => {
       </button>
       <ul className={css.route_list}>
         {Object.keys(Routes)
-          .filter(path => path !== 'AUTH')
+          .filter(path => path !== 'AUTH' && path !== 'HOME')
           .map(path => {
-            const routePath = path as Exclude<Path, 'AUTH'>
+            const routePath = path as Exclude<Path, 'AUTH' | 'HOME'>
             return (
               <li key={routePath}>
                 <NavigationLink
