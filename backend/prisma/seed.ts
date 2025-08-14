@@ -80,122 +80,6 @@ const defaultWorkers = [
   { id: 501, name: '' },
 ];
 
-const defaultRecords = [
-  {
-    id: 61,
-    createdAt: '2025-07-11T14:30:44.484Z',
-    workerID: 145,
-    productCode: 'ST_45',
-    amount: 31,
-    isDeleted: false,
-    createdBy: 'wastard',
-  },
-  {
-    id: 52,
-    createdAt: '2025-07-10T17:56:22.871Z',
-    workerID: 416,
-    productCode: 'EVA_45',
-    amount: 2,
-    isDeleted: false,
-    createdBy: 'wastard',
-  },
-  {
-    id: 59,
-    createdAt: '2025-07-10T21:20:56.575Z',
-    workerID: 295,
-    productCode: 'OPTIMA_45',
-    amount: 1,
-    isDeleted: false,
-    createdBy: 'wastard',
-  },
-  {
-    id: 60,
-    createdAt: '2025-07-10T21:22:31.862Z',
-    workerID: 295,
-    productCode: 'OPTIMA',
-    amount: 4,
-    isDeleted: false,
-    createdBy: 'wastard',
-  },
-  // {
-  //   id: 62,
-  //   date: '2025-07-11T14:30:47.016Z',
-  //   workerID: 145,
-  //   productCode: 'BTA_45',
-  //   amount: 21,
-  // },
-  // {
-  //   id: 63,
-  //   date: '2025-07-11T14:31:10.022Z',
-  //   workerID: 145,
-  //   productCode: 'ST_ECONOMY',
-  //   amount: 34,
-  // },
-  // {
-  //   id: 64,
-  //   date: '2025-07-11T14:31:13.310Z',
-  //   workerID: 145,
-  //   productCode: 'BT',
-  //   amount: 1,
-  // },
-  // {
-  //   id: 65,
-  //   date: '2025-07-11T14:31:20.481Z',
-  //   workerID: 145,
-  //   productCode: 'MAHRA',
-  //   amount: 6,
-  // },
-  // {
-  //   id: 66,
-  //   date: '2025-07-11T16:06:32.601Z',
-  //   workerID: 501,
-  //   productCode: 'MAHRA_ECONOMY_45',
-  //   amount: 1,
-  // },
-  // {
-  //   id: 67,
-  //   date: '2025-07-11T16:07:11.037Z',
-  //   workerID: 501,
-  //   productCode: 'BUISNESS_LP_45',
-  //   amount: 4,
-  // },
-  // {
-  //   id: 68,
-  //   date: '2025-07-11T16:07:18.770Z',
-  //   workerID: 501,
-  //   productCode: 'VIETNAM_D3',
-  //   amount: 6,
-  // },
-  // {
-  //   id: 69,
-  //   date: '2025-07-11T16:09:39.372Z',
-  //   workerID: 501,
-  //   productCode: 'ST_CALICO',
-  //   amount: 6,
-  // },
-  // {
-  //   id: 70,
-  //   date: '2025-07-11T16:10:07.131Z',
-  //   workerID: 416,
-  //   productCode: 'CLASSIC_PLUS_LP',
-  //   amount: 26,
-  // },
-  // {
-  //   id: 71,
-  //   date: '2025-07-11T16:11:50.464Z',
-  //   workerID: 469,
-  //   productCode: 'VIETNAM_D3',
-  //   amount: 3,
-  // },
-  // {
-  //   id: 72,
-  //   date: '2025-07-11T21:32:36.074Z',
-  //   workerID: 416,
-  //   productCode: 'OPTIMA',
-  //   amount: 11,
-  // },
-];
-
 async function main() {
   await prisma.product.createMany({
     data: defaultProducts,
@@ -204,11 +88,6 @@ async function main() {
 
   await prisma.worker.createMany({
     data: defaultWorkers,
-    skipDuplicates: true,
-  });
-
-  await prisma.record.createMany({
-    data: defaultRecords,
     skipDuplicates: true,
   });
 }
