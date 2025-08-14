@@ -71,7 +71,7 @@ export class AuthService {
       where: { login },
     });
 
-    if (typeof loginEqualExisted !== null)
+    if (loginEqualExisted !== null)
       throw new HttpException(
         `Пользователь с таким логином уже существует!`,
         HttpStatus.BAD_REQUEST,
