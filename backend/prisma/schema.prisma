@@ -8,48 +8,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  code    String   @id @unique
-  name    String
-  records Record[]
-}
-
-model Worker {
-  id      Int      @id @unique
-  name    String
-  records Record[]
-}
-
 model Admin {
-  hash           String
-  login          String         @id @unique
-  createdRecords Record[]       @relation("CreatorRecords")
-  changedRecords RecordChange[] @relation("ChangerRecords")
+  hash            String
+  login           String           @id @unique
+  acceptedStampes StampedProduct[] @relation("AcceptStampedProduct")
+  changedStampes  StampAudit[]     @relation("ChangeStampedProduct")
 }
 
-model Record {
-  id          Int            @id @default(autoincrement())
-  workerID    Int
-  productCode String
-  amount      Int
-  createdAt   DateTime
-  createdBy   String
-  isDeleted   Boolean        @default(false)
-  creator     Admin          @relation("CreatorRecords", fields: [createdBy], references: [login])
-  product     Product        @relation(fields: [productCode], references: [code])
-  worker      Worker         @relation(fields: [workerID], references: [id])
-  edits       RecordChange[]
+model Tread {
+  code           String           @id @unique
+  name           String
+  stampedProduct StampedProduct[]
 }
 
-model RecordChange {
-  id          Int      @id @default(autoincrement())
-  recordId    Int
-  action      String
-  amount      Int
-  workerID    Int
-  productCode String
-  changedBy   String
-  changedAt   DateTime @default(now())
-  changer     Admin    @relation("ChangerRecords", fields: [changedBy], references: [login])
-  record      Record   @relation(fields: [recordId], references: [id])
+model Stampist {
+  id       Int              @id @unique
+  name     String
+  products StampedProduct[]
+}
+
+model StampedProduct {
+  id         Int          @id @default(autoincrement())
+  stampistID Int
+  treadCode  String
+  amount     Int
+  createdAt  DateTime
+  createdBy  String
+  isDeleted  Boolean      @default(false)
+  accepter   Admin        @relation("AcceptStampedProduct", fields: [createdBy], references: [login])
+  tread      Tread        @relation(fields: [treadCode], references: [code])
+  stampist   Stampist     @relation(fields: [stampistID], references: [id])
+  changes    StampAudit[]
+}
+
+model StampAudit {
+  id             Int            @id @default(autoincrement())
+  productID      Int
+  stampistID     Int
+  treadCode      String
+  action         String
+  amount         Int
+  changedBy      String
+  changedAt      DateTime       @default(now())
+  changer        Admin          @relation("ChangeStampedProduct", fields: [changedBy], references: [login])
+  stampedProduct StampedProduct @relation(fields: [productID], references: [id])
 }

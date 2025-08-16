@@ -1,37 +1,37 @@
+import { useInvalidateStampists } from '@entities/stampist'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Button from '@shared/uikit/button/button'
 import ContentField from '@shared/uikit/content-field/content-field'
 import Input from '@shared/uikit/input'
 import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import z from 'zod'
+import { useAddStampist } from './api/use-add-stampist'
 import css from './style.module.scss'
-import { useAddTread } from './ui/use-add-tread'
 
-const TreadSchemaDTO = z.object({
-  code: z
-    .string()
-    .min(1)
-    .transform(val => val.trim()),
+const StampistSchemaDTO = z.object({
+  id: z.coerce.number().min(1),
   name: z
     .string()
     .min(1)
     .transform(val => val.trim()),
 })
 
-const AddTreadPage = () => {
-  const { mutateAsync: addTread } = useAddTread()
+const AddStampistPage = () => {
+  const { mutateAsync: addStampist } = useAddStampist()
+  const invalidateStampists = useInvalidateStampists()
   const { control, formState, reset, handleSubmit } = useForm({
     mode: 'onChange',
     defaultValues: {
-      code: undefined,
+      id: undefined,
       name: undefined,
     },
-    resolver: zodResolver(TreadSchemaDTO),
+    resolver: zodResolver(StampistSchemaDTO),
   })
 
-  const handleSaveTread = async (data: z.infer<typeof TreadSchemaDTO>) => {
+  const handleSaveStampist = async (data: z.infer<typeof StampistSchemaDTO>) => {
     try {
-      await addTread(data)
+      await addStampist(data)
+      invalidateStampists()
       reset()
     } catch (e) {
       alert('Saving error!')
@@ -39,14 +39,19 @@ const AddTreadPage = () => {
   }
 
   return (
-    <div className={css.tread_page}>
-      <ContentField title={'Добавление подошвы'}>
+    <div className={css.stampist_page}>
+      <ContentField title={'Добавление штамповщика'}>
         <form onSubmit={e => e.preventDefault()} className='flex flex-col gap-4'>
           <Controller
-            name='code'
+            name='id'
             control={control}
             render={({ field }) => (
-              <Input {...field} value={field.value ?? ''} placeholder='Уникальный код' />
+              <Input
+                {...field}
+                value={field.value ?? ''}
+                placeholder='Уникальный номер'
+                type='tel'
+              />
             )}
           />
           <Controller
@@ -54,7 +59,7 @@ const AddTreadPage = () => {
             control={control}
             render={({ field }) => <Input {...field} value={field.value ?? ''} placeholder='Имя' />}
           />
-          <Button onClick={handleSubmit(handleSaveTread)} disabled={!formState.isValid}>
+          <Button onClick={handleSubmit(handleSaveStampist)} disabled={!formState.isValid}>
             Сохранить
           </Button>
         </form>
@@ -63,4 +68,4 @@ const AddTreadPage = () => {
   )
 }
 
-export default AddTreadPage
+export default AddStampistPage

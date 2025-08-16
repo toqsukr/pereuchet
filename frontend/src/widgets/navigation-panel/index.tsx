@@ -12,10 +12,10 @@ import css from './style.module.scss'
 import { NavigationLink } from './ui/navigation-link'
 
 const names: Record<Exclude<Path, 'AUTH' | 'HOME'>, ReactNode> = {
-  ADD_PRODUCT: <FiEdit className='w-6 h-6 scale-110' />,
-  RECORD_DASHBOARD: <BsTable className='w-6 h-6' />,
+  ADD_STAMPED_PRODUCT: <FiEdit className='w-6 h-6 scale-110' />,
+  STAMPED_PRODUCT_DASHBOARD: <BsTable className='w-6 h-6' />,
   ADD_TREAT: <GiSlippers className='w-6 h-6' />,
-  ADD_WORKER: <IoPersonAdd className='w-6 h-6' />,
+  ADD_STAMPIST: <IoPersonAdd className='w-6 h-6' />,
 }
 
 const NavigationPanel = () => {

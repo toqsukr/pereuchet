@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const defaultProducts = [
+const defaultTreads = [
   { code: 'ST', name: 'СТ' },
   { code: 'STA', name: 'СТА' },
   { code: 'STA_45', name: 'СТА 45' },
@@ -17,7 +17,7 @@ const defaultProducts = [
   { code: 'BT_ECONOMY', name: 'БТ Эконом' },
   { code: 'BT_45', name: 'БТ 45' },
   { code: 'EVA', name: 'ЭВА' },
-  { code: 'EVA_LP', name: 'Эва ЛП' },
+  { code: 'EVA_LP', name: 'ЭВА ЛП' },
   { code: 'EVA_ECONOMY', name: 'ЭВА Эконом' },
   { code: 'EVA_ECONOMY_45', name: 'ЭВА Эконом 45' },
   { code: 'MAHRA_150', name: 'Махра 150' },
@@ -71,7 +71,7 @@ const defaultProducts = [
   { code: 'EVA_ECONOMY_32', name: 'ЭВА Эконом 32' },
 ];
 
-const defaultWorkers = [
+const defaultStampists = [
   { id: 416, name: 'Зариф' },
   { id: 470, name: 'Бегзод' },
   { id: 145, name: 'Бобур' },
@@ -81,13 +81,13 @@ const defaultWorkers = [
 ];
 
 async function main() {
-  await prisma.product.createMany({
-    data: defaultProducts,
+  await prisma.tread.createMany({
+    data: defaultTreads,
     skipDuplicates: true,
   });
 
-  await prisma.worker.createMany({
-    data: defaultWorkers,
+  await prisma.stampist.createMany({
+    data: defaultStampists,
     skipDuplicates: true,
   });
 }

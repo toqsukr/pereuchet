@@ -1,5 +1,6 @@
 import { memo, useMemo, type ReactNode } from 'react'
 import { Virtuoso, type VirtuosoProps } from 'react-virtuoso'
+import { useUnmountEditCancel } from '../model/use-unmount-edit-cancel'
 import { TableCell } from './table-cell'
 
 const DEFAULT_MIN_COLUMN_SIZE = '140px'
@@ -32,6 +33,8 @@ export const EditableTable = memo(
   ) => {
     const { data, columnLabels, getCells, columnSizes, ...rest } = props
     const tableData = useMemo(() => [columnLabels, ...(data ?? [])], [data, columnLabels])
+
+    useUnmountEditCancel()
 
     return (
       <Virtuoso

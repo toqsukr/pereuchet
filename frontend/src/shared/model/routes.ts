@@ -1,10 +1,16 @@
-export type Path = 'HOME' | 'AUTH' | 'RECORD_DASHBOARD' | 'ADD_PRODUCT' | 'ADD_WORKER' | 'ADD_TREAT'
+export type Path =
+  | 'HOME'
+  | 'AUTH'
+  | 'STAMPED_PRODUCT_DASHBOARD'
+  | 'ADD_STAMPED_PRODUCT'
+  | 'ADD_STAMPIST'
+  | 'ADD_TREAT'
 
 export const Routes: Record<Path, string> = {
   HOME: '/',
   AUTH: '/auth',
-  ADD_PRODUCT: '/add-product',
-  ADD_WORKER: '/add-worker',
+  ADD_STAMPED_PRODUCT: '/add-stamped-product',
+  ADD_STAMPIST: '/add-stampist',
   ADD_TREAT: '/add-treat',
-  RECORD_DASHBOARD: '/record-dashboard',
+  STAMPED_PRODUCT_DASHBOARD: '/stamped-product-dashboard',
 } as const

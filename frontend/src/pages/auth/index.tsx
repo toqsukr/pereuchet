@@ -33,10 +33,10 @@ const AuthPage = () => {
   const onSubmit = async (formData: { login: string; password: string }) => {
     await signIn(formData)
     queryClient.clear()
-    navigate(Routes.ADD_PRODUCT)
+    navigate(Routes.ADD_STAMPED_PRODUCT)
   }
 
-  if (isAuthorized) return <Navigate to={Routes.ADD_PRODUCT} />
+  if (isAuthorized) return <Navigate to={Routes.ADD_STAMPED_PRODUCT} />
 
   return (
     <section className={css.auth_page}>

@@ -1,17 +1,17 @@
-import { useProducts } from '@entities/product'
-import { useRecords } from '@entities/record'
-import { useWorkers } from '@entities/worker'
-import { useIsRecordsSaving } from '@pages/record-dashboard'
+import { useStampedProducts } from '@entities/stamped-product'
+import { useStampists } from '@entities/stampist'
+import { useTreads } from '@entities/tread'
+import { useIsStampedProductsSaving } from '@pages/stamped-product-dashboard'
 import Spinner from '@shared/uikit/spinner'
 import { type FC, type PropsWithChildren } from 'react'
 
 const AuthLoadingLayout: FC<PropsWithChildren> = ({ children }) => {
-  const { isLoading: isProductsLoading } = useProducts()
-  const { isLoading: isWorkersLoading } = useWorkers()
-  const { isLoading: isRecordsLoading } = useRecords()
-  const isRecordsSaving = useIsRecordsSaving()
+  const { isLoading: isTreadsLoading } = useTreads()
+  const { isLoading: isStampistsLoading } = useStampists()
+  const { isLoading: isStampedProductsLoading } = useStampedProducts()
+  const isStampedProductsSaving = useIsStampedProductsSaving()
 
-  if (isProductsLoading || isWorkersLoading || isRecordsLoading || isRecordsSaving)
+  if (isTreadsLoading || isStampistsLoading || isStampedProductsLoading || isStampedProductsSaving)
     return <Spinner className='fixed top-1/2 left-1/2 -translate-1/2' />
 
   return children

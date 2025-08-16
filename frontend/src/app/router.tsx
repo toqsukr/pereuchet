@@ -1,8 +1,8 @@
-import AddProductPage from '@pages/add-product'
+import AddProductPage from '@pages/add-stamped-product'
+import AddStampistPage from '@pages/add-stampist'
 import AddTreatPage from '@pages/add-tread'
-import AddWorkerPage from '@pages/add-worker'
 import AuthPage from '@pages/auth'
-import RecordDashboard from '@pages/record-dashboard'
+import StampedProductDashboard from '@pages/stamped-product-dashboard'
 import { Routes } from '@shared/model/routes'
 import NavigationPanel from '@widgets/navigation-panel'
 import { createBrowserRouter, Outlet, redirect } from 'react-router-dom'
@@ -13,7 +13,7 @@ import { QueryErrorBoundary } from './query-error-boundary'
 export const router = createBrowserRouter([
   {
     path: Routes.HOME,
-    loader: () => redirect(Routes.ADD_PRODUCT),
+    loader: () => redirect(Routes.ADD_STAMPED_PRODUCT),
   },
   {
     element: (
@@ -37,16 +37,16 @@ export const router = createBrowserRouter([
         ),
         children: [
           {
-            path: Routes.ADD_PRODUCT,
+            path: Routes.ADD_STAMPED_PRODUCT,
             element: <AddProductPage />,
           },
           {
-            path: Routes.RECORD_DASHBOARD,
-            element: <RecordDashboard />,
+            path: Routes.STAMPED_PRODUCT_DASHBOARD,
+            element: <StampedProductDashboard />,
           },
           {
-            path: Routes.ADD_WORKER,
-            element: <AddWorkerPage />,
+            path: Routes.ADD_STAMPIST,
+            element: <AddStampistPage />,
           },
           {
             path: Routes.ADD_TREAT,
