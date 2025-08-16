@@ -23,7 +23,7 @@ export const CancelChangesButton: FC<CancelChangesButtonProps> = ({ onCancel, ..
       {...props}
       title='Отменить изменения'
       onClick={handleClearEdited}
-      Icon={<RxCross2 className='w-6 h-6 scale-120' />}
+      Icon={<RxCross2 className='w-6 h-6  scale-120' />}
     />
   )
 }

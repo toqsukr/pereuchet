@@ -6,15 +6,17 @@ import { TableCell } from './table-cell'
 const DEFAULT_MIN_COLUMN_SIZE = '140px'
 const DEFAULT_MAX_COLUMN_SIZE = '1fr'
 
+type SizeValue = `${number}rem` | `${number}px` | `${number}fr` | `${number}%`
+
 type MinMaxSizes = {
   [key: string]:
     | {
-        min: `${number}rem` | `${number}px`
-        max?: `${number}rem` | `${number}px`
+        min: SizeValue
+        max?: SizeValue
       }
     | {
-        min?: `${number}rem` | `${number}px`
-        max: `${number}rem` | `${number}px`
+        min?: SizeValue
+        max: SizeValue
       }
 }
 

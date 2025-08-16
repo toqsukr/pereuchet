@@ -7,21 +7,22 @@ import Input from '@shared/uikit/input'
 import cn from 'classnames'
 import { useMemo, useState, type FC } from 'react'
 import { Controller, type Control, type UseFormSetValue } from 'react-hook-form'
+import type { TProductShownData } from '../model/type'
 import { CellSelect } from './cell-select'
 
-type TProductWithoutDeleted = Omit<TStampedProduct, 'isDeleted'>
-
 type StaticRowProps = {
-  data: Omit<TStampedProduct, 'isDeleted'>
+  data: TProductShownData
 }
 
 type EditableRowProps = {
-  product: TProductWithoutDeleted
+  product: TProductShownData
   control: Control<Record<string, TStampedProduct>>
   setFormState: UseFormSetValue<Record<string, TStampedProduct>>
 }
 
 type ProductRowProps = EditableRowProps
+
+// dayjs(date).format('DD.MM.YYYY HH:mm:ss')
 
 export const ProductRow = (props: ProductRowProps) => {
   const isEditing = useIsEditing()
@@ -35,7 +36,7 @@ const StaticRow: FC<StaticRowProps> = ({ data }) => {
   const getTreadByCode = useTreadByCode()
 
   return Object.keys(data).map(key => {
-    const productKey = key as keyof Omit<TStampedProduct, 'isDeleted'>
+    const productKey = key as keyof TProductShownData
     return (
       <TableCell key={productKey}>
         {productKey === 'treadCode' ? getTreadByCode(data[productKey])?.name : data[productKey]}
@@ -122,32 +123,6 @@ const EditableRow: FC<EditableRowProps> = ({ product, control, setFormState }) =
               ['line-through text-[#ffffff99]']: isDeleted,
             })}>
             {product.createdBy}
-          </TableCell>
-        )}
-      />
-      <Controller
-        control={control}
-        name={`${product.id}.editedAt`}
-        defaultValue={product.editedAt}
-        render={() => (
-          <TableCell
-            className={cn({
-              ['line-through text-[#ffffff99]']: isDeleted,
-            })}>
-            {product.editedAt}
-          </TableCell>
-        )}
-      />
-      <Controller
-        control={control}
-        name={`${product.id}.editedBy`}
-        defaultValue={product.editedBy}
-        render={() => (
-          <TableCell
-            className={cn({
-              ['line-through text-[#ffffff99]']: isDeleted,
-            })}>
-            {product.editedBy}
           </TableCell>
         )}
       />

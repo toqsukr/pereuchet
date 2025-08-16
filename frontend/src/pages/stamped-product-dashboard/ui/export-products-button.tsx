@@ -3,13 +3,14 @@ import { useTreadByCode } from '@entities/tread'
 import { defineExportData, ExportButton } from '@features/csv-export'
 import { useActiveFilter } from '@features/date-filter'
 import { useIsEditing } from '@features/editable-table'
+import type { IconButtonProps } from '@shared/uikit/icon-button'
 import dayjs from 'dayjs'
 import { type FC } from 'react'
 
 type ExportProductsButtonProps = {
   data: TStampedProduct[] | undefined
   columnLabels: readonly string[]
-}
+} & Omit<IconButtonProps, 'Icon'>
 
 function formatDate(date: Date) {
   return dayjs(date).format('DD.MM.YYYY')
@@ -30,12 +31,12 @@ function defineFileFilterPrefix(exportFilter: false | Date | [from: Date | null,
   return `фильтр_от-${formatDate(periodFilter[0])}-до-${formatDate(periodFilter[1])}`
 }
 
-const ExportProductsButton: FC<ExportProductsButtonProps> = props => {
+const ExportProductsButton: FC<ExportProductsButtonProps> = ({ data, columnLabels, ...props }) => {
   const isEditing = useIsEditing()
   const getTreadByCode = useTreadByCode()
   const exportFilter = useActiveFilter()
 
-  const preparedData = props.data?.map(({ id, createdAt, stampistID, treadCode, amount }) => ({
+  const preparedData = data?.map(({ id, createdAt, stampistID, treadCode, amount }) => ({
     id,
     createdAt,
     stampistID,
@@ -43,11 +44,17 @@ const ExportProductsButton: FC<ExportProductsButtonProps> = props => {
     amount,
   }))
 
-  const exportData = defineExportData(preparedData, props.columnLabels)
+  const exportData = defineExportData(preparedData, columnLabels)
 
   if (isEditing) return
 
-  return <ExportButton data={exportData} fileprefix={`${defineFileFilterPrefix(exportFilter)}`} />
+  return (
+    <ExportButton
+      {...props}
+      data={exportData}
+      fileprefix={`${defineFileFilterPrefix(exportFilter)}`}
+    />
+  )
 }
 
 export default ExportProductsButton

@@ -10,7 +10,7 @@ import type { FieldValues, UseFormReturn } from 'react-hook-form'
 import { useAcceptStampedProducts } from '../api/use-accept-stamped-products'
 import ExportRecordsButton from './export-products-button'
 
-const exportLabels = ['ID', 'Создан', 'Штамповщик', 'Тип', 'Количество'] as const
+const exportLabels = ['ID', 'Создан', 'Штамповщик', 'Подошва', 'Количество'] as const
 
 type ControlPanelProps<TFieldValues extends FieldValues> = {
   formSettings: UseFormReturn<TFieldValues>
@@ -21,9 +21,9 @@ type ControlPanelProps<TFieldValues extends FieldValues> = {
 const ControlPanel = (props: ControlPanelProps<Record<string, TStampedProduct>>) => {
   const { formSettings, exportData, tableData } = props
   const invalidateStampedProducts = useInvalidateStampedProducts()
-  const { mutateAsync: saveEditing } = useAcceptStampedProducts()
+  const { mutateAsync: acceptProducts, isPending: isProductsAccepting } = useAcceptStampedProducts()
   const onValidSubmit = async (data: Record<string, TStampedProduct>) => {
-    await saveEditing(data)
+    await acceptProducts(data)
     formSettings.reset(data)
     invalidateStampedProducts()
   }
@@ -31,15 +31,19 @@ const ControlPanel = (props: ControlPanelProps<Record<string, TStampedProduct>>)
   return (
     <section className='flex shrink-1 gap-4 bg-[var(--content-field-color)] p-4 rounded-2xl max-[531px]:flex-col'>
       <ClearFilterButton />
-      <ToggleEditButton />
+      <ToggleEditButton disabled={isProductsAccepting} />
       <ConfirmChangesButton
-        disabled={!formSettings.formState.isValid}
+        disabled={!formSettings.formState.isValid || isProductsAccepting}
         fieldChanged={formSettings.formState.isDirty}
-        onConfirm={formSettings.handleSubmit(onValidSubmit, errors => console.log(errors))}
+        onConfirm={formSettings.handleSubmit(onValidSubmit, errors => alert(errors))}
         onCancel={() => formSettings.reset(arrayToRecordWithID(tableData))}
       />
       <CancelChangesButton onCancel={() => formSettings.reset(arrayToRecordWithID(tableData))} />
-      <ExportRecordsButton columnLabels={exportLabels} data={exportData} />
+      <ExportRecordsButton
+        disabled={isProductsAccepting}
+        columnLabels={exportLabels}
+        data={exportData}
+      />
     </section>
   )
 }
