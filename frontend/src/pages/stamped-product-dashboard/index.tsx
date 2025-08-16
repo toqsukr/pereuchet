@@ -11,7 +11,14 @@ import { useTableData } from './model/use-table-data'
 import ControlPanel from './ui/control-panel'
 import { ProductRow } from './ui/product-row'
 
-const tableLabels = ['ID', 'Создан', 'Создатель', 'Штамповщик', 'Подошва', 'Количество'] as const
+const productTableLabels = [
+  'ID',
+  'Создан',
+  'Создатель',
+  'Штамповщик',
+  'Подошва',
+  'Количество',
+] as const
 
 const columnSizes = {
   0: { min: '8rem' },
@@ -77,7 +84,7 @@ const StampedProductDashboard = () => {
         <EditableTable
           data={tableData}
           columnSizes={columnSizes}
-          columnLabels={tableLabels}
+          columnLabels={productTableLabels}
           getCells={memoizedGetCells}
         />
       </div>

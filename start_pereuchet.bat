@@ -9,4 +9,4 @@ if %errorLevel% neq 0 (
 )
 
 :: Если уже админ — выполняем команды
-start wsl -d Ubuntu -- bash -c "sudo service docker start && cd ~/pereuchet && sudo docker compose up -d; exec bash"
+start wsl -d Ubuntu -- bash -c "sudo service docker start && cd ~/pereuchet && sudo docker compose up -d; exec bash && exit"
