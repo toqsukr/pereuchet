@@ -3,7 +3,7 @@ WORKDIR /app
 
 COPY ./backend/prisma /app/prisma/
 COPY ./backend/package*.json ./
-RUN apt-get update && apt-get upgrade -y && apt-get -qy install openssl
+RUN apt-get update && apt-get upgrade -y && apt-get -qy install openssl && apt-get install -y curl
 RUN npm install
 COPY ./backend .
 RUN chmod +x ./entrypoint.sh
