@@ -52,4 +52,6 @@ model StampAudit {
   changedAt      DateTime       @default(now())
   changer        Admin          @relation("ChangeStampedProduct", fields: [changedBy], references: [login])
   stampedProduct StampedProduct @relation(fields: [productID], references: [id])
+
+  @@unique([productID, action, changedAt])
 }
