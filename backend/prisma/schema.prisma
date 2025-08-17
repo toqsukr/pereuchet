@@ -28,7 +28,7 @@ model Stampist {
 }
 
 model StampedProduct {
-  id         Int          @id @default(autoincrement())
+  id         Int          @id @unique @default(autoincrement())
   stampistID Int
   treadCode  String
   amount     Int
@@ -42,7 +42,7 @@ model StampedProduct {
 }
 
 model StampAudit {
-  id             Int            @id @default(autoincrement())
+  id             Int            @id @unique @default(autoincrement())
   productID      Int
   stampistID     Int
   treadCode      String
@@ -52,6 +52,4 @@ model StampAudit {
   changedAt      DateTime       @default(now())
   changer        Admin          @relation("ChangeStampedProduct", fields: [changedBy], references: [login])
   stampedProduct StampedProduct @relation(fields: [productID], references: [id])
-
-  @@unique([productID, action, changedAt])
 }
