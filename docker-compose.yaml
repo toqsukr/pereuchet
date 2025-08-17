@@ -8,7 +8,9 @@ services:
     env_file:
       - .env
     environment:
-      - WITH_MIGRATIONS=${WITH_MIGRATIONS:-false}
+      - WITH_PUSH=${WITH_PUSH:-false}
+      - WITH_SEED=${WITH_SEED:-false}
+      - WITH_MIGRATION=${WITH_MIGRATION:-false}
     depends_on:
       db:
         condition: service_healthy
