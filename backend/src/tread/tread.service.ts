@@ -1,10 +1,14 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { FastifyRequest } from 'fastify';
+import { JwtHelper } from 'src/auth/auth.helper';
 import { PrismaService } from 'src/prisma.service';
-import { CreateTreadDTO, UpdateTreadDTO } from './tread.dto';
+import { CreateTreadDTO, MassUpdateTread, UpdateTreadDTO } from './tread.dto';
 
 @Injectable()
 export class TreadService {
   private readonly logger = new Logger(TreadService.name);
+  private readonly jwtHelper = new JwtHelper();
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -40,9 +44,10 @@ export class TreadService {
     return 'Success!';
   }
 
-  async updateTread(treadData: UpdateTreadDTO) {
+  async updateTread(treadData: UpdateTreadDTO, tx?: Prisma.TransactionClient) {
+    const client = tx ?? this.prisma;
     this.logger.warn(`Updating tread: ${treadData.code}`);
-    await this.prisma.tread.update({
+    await client.tread.update({
       where: { code: treadData.code },
       data: treadData,
     });
@@ -50,9 +55,26 @@ export class TreadService {
     return 'Success!';
   }
 
-  async deleteTread(code: string) {
+  async massUpdateTread(treads: MassUpdateTread[], request: FastifyRequest) {
+    return this.prisma.$transaction(async (tx) => {
+      for await (const { isDeleted, ...tread } of treads) {
+        if (isDeleted) {
+          await this.deleteTread(tread.code, tx);
+        } else {
+          await this.updateTread(tread, tx);
+        }
+      }
+      this.logger.log(
+        `Массовое обновление подошв пользователем ${this.jwtHelper.defineActor(request)}`,
+      );
+      return 'Success!';
+    });
+  }
+
+  async deleteTread(code: string, tx?: Prisma.TransactionClient) {
+    const client = tx ?? this.prisma;
     this.logger.warn(`Deleting tread: ${code}`);
-    await this.prisma.tread.delete({ where: { code } });
+    await client.tread.delete({ where: { code } });
     this.logger.log(`Tread deleted: ${code}`);
     return 'Success!';
   }

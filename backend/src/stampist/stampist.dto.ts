@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 export class CreateStampistDTO {
   @IsNumber()
@@ -23,3 +30,18 @@ export class DeleteStampistDTO {
 }
 
 export class UpdateStampistDTO extends CreateStampistDTO {}
+
+export class MassUpdateStampist extends UpdateStampistDTO {
+  @IsBoolean()
+  @IsNotEmpty()
+  @ApiProperty()
+  isDeleted: boolean;
+}
+
+export class MassUpdateStampistsDTO {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => MassUpdateStampist)
+  @ApiProperty({ type: [MassUpdateStampist] })
+  stampists: MassUpdateStampist[];
+}

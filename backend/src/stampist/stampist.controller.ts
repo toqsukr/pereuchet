@@ -8,17 +8,22 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import { FastifyRequest } from 'fastify';
 import { AuthGuard } from 'src/auth/auth.guard';
 import {
   CreateStampistDTO,
   DeleteStampistDTO,
+  MassUpdateStampistsDTO,
   UpdateStampistDTO,
 } from './stampist.dto';
 import { StampistService } from './stampist.service';
 
-@Controller('/stampist')
+const STAMPIST_PREFIX = '/stampist';
+
+@Controller(STAMPIST_PREFIX)
 export class StampistController {
   constructor(private readonly stampistService: StampistService) {}
   private readonly logger = new Logger(StampistController.name);
@@ -27,7 +32,7 @@ export class StampistController {
   @HttpCode(200)
   @UseGuards(AuthGuard)
   async getStampists() {
-    this.logger.log('GET /stampist - Fetching all stampists');
+    this.logger.log(`GET ${STAMPIST_PREFIX} - Fetching all stampists`);
     return this.stampistService.getStampists();
   }
 
@@ -36,7 +41,7 @@ export class StampistController {
   @UseGuards(AuthGuard)
   createStampist(@Body() stampistDTO: CreateStampistDTO) {
     this.logger.debug(
-      `POST /stampist - Creating stampist: ${JSON.stringify(stampistDTO)}`,
+      `POST ${STAMPIST_PREFIX} - Creating stampist: ${JSON.stringify(stampistDTO)}`,
     );
     return this.stampistService.createStampist(stampistDTO);
   }
@@ -45,15 +50,32 @@ export class StampistController {
   @HttpCode(201)
   @UseGuards(AuthGuard)
   updateStampist(@Body() stampistDTO: UpdateStampistDTO) {
-    this.logger.warn(`PUT /stampist - Updating stampist ID: ${stampistDTO.id}`);
+    this.logger.warn(
+      `PUT ${STAMPIST_PREFIX} - Updating stampist ID: ${stampistDTO.id}`,
+    );
     return this.stampistService.updateStampist(stampistDTO);
+  }
+
+  @Put('/mass-update')
+  @HttpCode(201)
+  @UseGuards(AuthGuard)
+  massUpdateStampedProducts(
+    @Body() body: MassUpdateStampistsDTO,
+    @Req() request: FastifyRequest,
+  ) {
+    this.logger.warn(
+      `PUT ${STAMPIST_PREFIX}/mass-update - Mass stampists updating`,
+    );
+    return this.stampistService.massUpdateStampist(body.stampists, request);
   }
 
   @Delete()
   @HttpCode(201)
   @UseGuards(AuthGuard)
   deleteStampist(@Query() query: DeleteStampistDTO) {
-    this.logger.verbose(`DELETE /stampist - Deleting stampist ID: ${query.id}`);
+    this.logger.verbose(
+      `DELETE ${STAMPIST_PREFIX} - Deleting stampist ID: ${query.id}`,
+    );
     return this.stampistService.deleteStampist(query.id);
   }
 }
