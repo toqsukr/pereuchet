@@ -29,7 +29,7 @@ const ControlPanel = (props: ControlPanelProps<Record<string, TStampedProduct>>)
   }
 
   return (
-    <section className='flex shrink-1 gap-4 bg-[var(--content-field-color)] p-4 rounded-2xl max-[531px]:flex-col'>
+    <section className='flex shrink-1 gap-4 bg-[var(--content-field-color)] p-4 rounded-2xl max-[642px]:flex-col'>
       <ClearFilterButton />
       <ToggleEditButton disabled={isProductsAccepting} />
       <ConfirmChangesButton

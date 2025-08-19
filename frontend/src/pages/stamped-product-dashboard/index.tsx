@@ -25,7 +25,7 @@ const columnSizes = {
   1: { min: '12rem' },
   2: { min: '7rem' },
   3: { min: '8rem' },
-  4: { min: '12rem' },
+  4: { min: '14rem' },
   5: { min: '7.5rem' },
 } as const
 
@@ -71,8 +71,8 @@ const StampedProductDashboard = () => {
   )
 
   return (
-    <div className='flex flex-col gap-4 w-full h-full justify-self-center max-w-[1650px] px-6'>
-      <div className='w-full flex gap-4'>
+    <div className='flex flex-col gap-5 w-full h-full justify-self-center'>
+      <div className='w-full flex gap-5'>
         <DateFilter />
         <ControlPanel
           formSettings={formSettings}
@@ -80,7 +80,7 @@ const StampedProductDashboard = () => {
           tableData={filteredData}
         />
       </div>
-      <div className='flex h-full w-full gap-12 pb-2 rounded-2xl'>
+      <div className='flex h-full w-full gap-12 rounded-2xl'>
         <EditableTable
           data={tableData}
           columnSizes={columnSizes}

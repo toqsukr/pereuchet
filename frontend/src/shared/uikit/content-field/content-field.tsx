@@ -13,7 +13,7 @@ const HeaderWithIcon: FC<HeaderWithIconProps> = ({ icon, text }) => {
   )
 }
 
-type ContentFieldProps = { title?: ReactNode; onBack?: () => void }
+export type ContentFieldProps = { title?: ReactNode; onBack?: () => void }
 
 const ContentField = ({ children, title, onBack }: PropsWithChildren<ContentFieldProps>) => {
   return (

@@ -8,6 +8,8 @@ const StampistSchema = z.object({
   name: z.string(),
 })
 
+type StampistDTO = z.infer<typeof StampistSchema>
+
 export const stampistService = {
   async getStampists() {
     return authTemplate.get(STAMPIST_PREFIX).then(({ data }) => StampistSchema.array().parse(data))
@@ -15,6 +17,10 @@ export const stampistService = {
 
   async createStampist(data: { id: number; name: string }) {
     return authTemplate.post(STAMPIST_PREFIX, { ...data })
+  },
+
+  async massUpdateStampists(stampists: StampistDTO[]) {
+    return authTemplate.put(`${STAMPIST_PREFIX}/mass-update`, { stampists })
   },
 
   async deleteStampist(id: number) {

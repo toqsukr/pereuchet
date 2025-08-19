@@ -1,0 +1,45 @@
+@reference 'tailwindcss';
+
+.subroute_navigation {
+  @apply fixed top-1/2 left-1/2 -translate-1/2 grid gap-5 max-w-[2500px] max-h-[1200px] w-screen h-screen p-6 pb-14 overflow-y-auto;
+
+  grid-template-columns: minmax(84px, 23rem) minmax(490px, 1fr);
+
+  @media (height < 47rem /* 752px */) {
+    @apply p-6 pr-14;
+  }
+
+  @media (width < 642px) {
+    grid-template-columns: minmax(84px, 23rem) minmax(360px, 1fr);
+  }
+}
+
+.side_panel {
+  @apply p-6 flex flex-col gap-5 rounded-2xl bg-[var(--content-field-color)];
+
+  > h1 {
+    @apply text-[1.3rem] font-bold;
+  }
+
+  @media (width < 75rem /* 1200px */) {
+    @apply p-4;
+  }
+}
+
+.link_button {
+  @apply w-full flex gap-4 items-center rounded-[.625rem] text-[#ffffff] p-4 truncate bg-left!;
+
+  background: linear-gradient(
+    90deg,
+    #0198ea 0%,
+    #14ccfa 50%,
+    var(--background-color) 50%,
+    var(--background-color) 100%
+  );
+  background-size: 210% 110%;
+  transition: background-position 0.5s ease, opacity 0.3s ease, scale 0.2s;
+
+  &.inactive {
+    @apply bg-right! cursor-pointer hover:underline;
+  }
+}

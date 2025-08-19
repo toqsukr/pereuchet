@@ -7,13 +7,16 @@ export const useTreads = () => {
   return useQuery({
     queryKey: [TREADS_QUERY_KEY],
     queryFn: () => treadService.getTreads(),
+    select: treads =>
+      treads.map(tread => ({
+        ...tread,
+        isDeleted: false,
+      })),
   })
 }
 
 export const useInvalidateTreads = () => {
   const queryClient = useQueryClient()
 
-  return () => {
-    queryClient.invalidateQueries({ queryKey: [TREADS_QUERY_KEY] })
-  }
+  return () => queryClient.invalidateQueries({ queryKey: [TREADS_QUERY_KEY] })
 }

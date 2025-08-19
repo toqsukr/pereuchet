@@ -7,8 +7,8 @@ import Input from '@shared/uikit/input'
 import cn from 'classnames'
 import { useMemo, useState, type FC } from 'react'
 import { Controller, type Control, type UseFormSetValue } from 'react-hook-form'
+import { CellSelect } from '../../../features/editable-table/ui/cell-select'
 import type { TProductShownData } from '../model/type'
-import { CellSelect } from './cell-select'
 
 type StaticRowProps = {
   data: TProductShownData

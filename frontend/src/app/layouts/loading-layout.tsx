@@ -7,7 +7,7 @@ const LoadingLayout: FC<PropsWithChildren> = ({ children }) => {
 
   if (isAuthChecking) return <Spinner className='fixed top-1/2 left-1/2 -translate-1/2' />
 
-  return children
+  return <div className='w-full'>{children}</div>
 }
 
 export default LoadingLayout

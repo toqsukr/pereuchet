@@ -44,7 +44,7 @@ export const EditableTable = memo(
         data={tableData}
         topItemCount={1}
         increaseViewportBy={{ top: 250, bottom: 250 }}
-        className='w-full bg-[var(--content-field-color)] rounded-2xl text-base'
+        className='w-full h-full bg-[var(--content-field-color)] rounded-2xl text-base'
         components={{ List: props => <div {...props} className='flex flex-col'></div> }}
         itemContent={(index, record) => (
           <TableItem

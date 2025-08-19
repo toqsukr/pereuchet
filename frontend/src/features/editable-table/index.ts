@@ -1,5 +1,6 @@
 export { useIsEditing } from './model/use-is-editing'
 export { CancelChangesButton } from './ui/cancel-changes-button'
+export { CellSelect } from './ui/cell-select'
 export { ConfirmChangesButton } from './ui/confirm-changes-button'
 export { EditableTable } from './ui/editable-table'
 export { TableCell } from './ui/table-cell'

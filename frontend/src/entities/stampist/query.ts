@@ -7,13 +7,12 @@ export const useStampists = () => {
   return useQuery({
     queryKey: [STAMPISTS_QUERY_KEY],
     queryFn: () => stampistService.getStampists(),
+    select: stampists => stampists.map(stampist => ({ ...stampist, isDeleted: false })),
   })
 }
 
 export const useInvalidateStampists = () => {
   const queryClient = useQueryClient()
 
-  return () => {
-    queryClient.invalidateQueries({ queryKey: [STAMPISTS_QUERY_KEY] })
-  }
+  return () => queryClient.invalidateQueries({ queryKey: [STAMPISTS_QUERY_KEY] })
 }

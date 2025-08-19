@@ -1,16 +1,42 @@
-export type Path =
-  | 'HOME'
-  | 'AUTH'
-  | 'STAMPED_PRODUCT_DASHBOARD'
-  | 'ADD_STAMPED_PRODUCT'
-  | 'ADD_STAMPIST'
-  | 'ADD_TREAT'
-
-export const Routes: Record<Path, string> = {
+export const Routes = {
   HOME: '/',
   AUTH: '/auth',
-  ADD_STAMPED_PRODUCT: '/add-stamped-product',
-  ADD_STAMPIST: '/add-stampist',
-  ADD_TREAT: '/add-treat',
-  STAMPED_PRODUCT_DASHBOARD: '/stamped-product-dashboard',
+  STAMPED_PRODUCT: '/stamped-product',
+  ADD_STAMPED_PRODUCT: '/stamped-product/add',
+  STAMPED_PRODUCT_DASHBOARD: '/stamped-product/dashboard',
+  STAMPIST: '/stampist',
+  ADD_STAMPIST: '/stampist/add',
+  STAMPIST_DASHBOARD: '/stampist/dashboard',
+  TREAD: '/tread',
+  ADD_TREAD: '/tread/add',
+  TREAD_DASHBOARD: '/tread/dashboard',
 } as const
+
+export type Path = keyof typeof Routes
+
+export type RootPath<R = (typeof Routes)[Path]> = R extends `/${infer Root}/${string}`
+  ? Root
+  : never
+
+export type SubPath<R extends RootPath, U = (typeof Routes)[Path]> = U extends `/${R}/${infer Sub}`
+  ? Sub
+  : never
+
+const rootPathRegex = /^\/([^\/]+)\//
+
+export const rootPathes = Array.from(
+  new Set(
+    Object.values(Routes)
+      .filter(route => route.match(rootPathRegex) != null)
+      .map(route => {
+        return route.match(rootPathRegex)![0].slice(1, -1)
+      })
+  ).values()
+) as RootPath[]
+
+export function getSubRoutes<R extends RootPath>(root: R): SubPath<R>[] {
+  const prefix = `/${root}/`
+  return (Object.values(Routes) as string[])
+    .filter(route => route.startsWith(prefix))
+    .map(route => route.slice(prefix.length)) as SubPath<R>[]
+}
