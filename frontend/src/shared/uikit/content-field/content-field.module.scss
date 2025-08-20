@@ -4,16 +4,8 @@
   @apply h-full text-white p-6 rounded-2xl;
 
   background-color: var(--content-field-color);
-
-  @media (max-height: 47rem) {
-    @apply p-5;
-  }
 }
 
 .header {
   @apply text-[1.3rem] font-bold mb-6;
-
-  @media (max-height: 47rem) {
-    @apply text-xl mb-5;
-  }
 }

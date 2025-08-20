@@ -8,7 +8,7 @@
   box-shadow: 0 0 16px 4px var(--background-color);
   transition: transform 0.2s;
 
-  @media (height < 47rem /* 752px */) {
+  @media (height < 667px /* 752px */) {
     @apply bottom-1/2 right-4 flex-row;
     transform: translate(calc(100% - 1.2rem), 50%);
 
@@ -27,7 +27,7 @@
 
   background-color: var(--content-field-color);
 
-  @media (height < 47rem /* 752px */) {
+  @media (height < 667px /* 752px */) {
     @apply pt-6 pl-0;
     flex-direction: column;
   }
@@ -37,7 +37,7 @@
   @apply flex justify-center items-center z-20 px-4 py-2;
   background-color: var(--content-field-color);
 
-  @media (height < 47rem /* 752px */) {
+  @media (height < 667px /* 752px */) {
     @apply py-4 px-2;
   }
 }
@@ -50,7 +50,7 @@
     transform: rotate(0deg);
   }
 
-  @media (height < 47rem /* 752px */) {
+  @media (height < 667px /* 752px */) {
     transform: rotate(90deg);
 
     &.active {

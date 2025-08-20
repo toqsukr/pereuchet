@@ -14,7 +14,7 @@ const PeriodDate: FC<{ onPick?: () => void }> = ({ onPick }) => {
   }
 
   return (
-    <section className='flex gap-4 max-[786px]:flex-col'>
+    <section className='flex gap-4 max-[1152px]:flex-col'>
       <div className='w-full flex items-center gap-4'>
         <label className='min-w-[1.5rem]'>От:</label>
         <Calendar

@@ -3,14 +3,24 @@
 .subroute_navigation {
   @apply fixed top-1/2 left-1/2 -translate-1/2 grid gap-5 max-w-[2500px] max-h-[1200px] w-screen h-screen p-6 pb-14 overflow-y-auto;
 
-  grid-template-columns: minmax(84px, 23rem) minmax(490px, 1fr);
+  grid-template-columns: minmax(84px, 22rem) minmax(490px, 1fr);
 
-  @media (height < 47rem /* 752px */) {
-    @apply p-6 pr-14;
+  @media (height < 667px /* 752px */) {
+    @apply p-6! pr-14!;
+
+    @media (width < 545px) {
+      @apply p-3  pr-12;
+      grid-template-columns: minmax(360px, 1fr);
+    }
   }
 
-  @media (width < 642px) {
-    grid-template-columns: minmax(84px, 23rem) minmax(360px, 1fr);
+  @media (width < 674px) {
+    grid-template-columns: minmax(84px, 22rem) minmax(360px, 1fr);
+  }
+
+  @media (width < 545px) {
+    @apply p-3 pb-12;
+    grid-template-columns: minmax(360px, 1fr);
   }
 }
 
@@ -23,6 +33,10 @@
 
   @media (width < 75rem /* 1200px */) {
     @apply p-4;
+  }
+
+  @media (width < 545px) {
+    display: none;
   }
 }
 
@@ -37,7 +51,7 @@
     var(--background-color) 100%
   );
   background-size: 210% 110%;
-  transition: background-position 0.5s ease, opacity 0.3s ease, scale 0.2s;
+  transition: opacity 0.3s ease, scale 0.2s;
 
   &.inactive {
     @apply bg-right! cursor-pointer hover:underline;

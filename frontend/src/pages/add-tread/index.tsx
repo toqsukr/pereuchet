@@ -52,7 +52,9 @@ const AddTreadPage = () => {
           <Controller
             name='name'
             control={control}
-            render={({ field }) => <Input {...field} value={field.value ?? ''} placeholder='Имя' />}
+            render={({ field }) => (
+              <Input {...field} value={field.value ?? ''} placeholder='Название' />
+            )}
           />
           <Button onClick={handleSubmit(handleSaveTread)} disabled={!formState.isValid}>
             Сохранить
