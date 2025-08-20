@@ -4,8 +4,8 @@ import ContentField from '@shared/uikit/content-field/content-field'
 import Input from '@shared/uikit/input'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useAddTread } from './api/use-add-tread'
 import css from './style.module.scss'
-import { useAddTread } from './ui/use-add-tread'
 
 const TreadSchemaDTO = z.object({
   code: z
@@ -19,7 +19,7 @@ const TreadSchemaDTO = z.object({
 })
 
 const AddTreadPage = () => {
-  const { mutateAsync: addTread } = useAddTread()
+  const { mutateAsync: addTread, isPending: isTreadAdding } = useAddTread()
   const { control, formState, reset, handleSubmit } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -45,6 +45,7 @@ const AddTreadPage = () => {
           <Controller
             name='code'
             control={control}
+            disabled={isTreadAdding}
             render={({ field }) => (
               <Input {...field} value={field.value ?? ''} placeholder='Уникальный код' />
             )}
@@ -52,11 +53,14 @@ const AddTreadPage = () => {
           <Controller
             name='name'
             control={control}
+            disabled={isTreadAdding}
             render={({ field }) => (
               <Input {...field} value={field.value ?? ''} placeholder='Название' />
             )}
           />
-          <Button onClick={handleSubmit(handleSaveTread)} disabled={!formState.isValid}>
+          <Button
+            onClick={handleSubmit(handleSaveTread)}
+            disabled={!formState.isValid || isTreadAdding}>
             Сохранить
           </Button>
         </form>

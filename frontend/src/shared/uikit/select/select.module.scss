@@ -14,6 +14,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
+  -webkit-appearance: none;
+  appearance: none;
+
   &::placeholder {
     color: var(--text-third-color);
   }
@@ -24,8 +27,9 @@
     }
   }
 
-  -webkit-appearance: none;
-  appearance: none;
+  &:disabled {
+    opacity: 0.5;
+  }
 }
 
 .option {

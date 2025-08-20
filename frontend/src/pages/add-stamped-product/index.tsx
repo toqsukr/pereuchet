@@ -8,7 +8,7 @@ import Input from '@shared/uikit/input'
 import Select from '@shared/uikit/select/select'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useAcceptProduct } from './model/use-accept-product'
+import { useAcceptProduct } from './api/use-accept-product'
 import css from './style.module.scss'
 
 const FormSchemaDTO = z.object({
@@ -20,7 +20,7 @@ const FormSchemaDTO = z.object({
 const HomePage = () => {
   const { data: stampists } = useStampists()
   const { data: treads } = useTreads()
-  const { mutateAsync: acceptProduct } = useAcceptProduct()
+  const { mutateAsync: acceptProduct, isPending: isProductAccepting } = useAcceptProduct()
   const invalidateProducts = useInvalidateStampedProducts()
   const { control, formState, resetField, handleSubmit } = useForm({
     mode: 'onChange',
@@ -50,6 +50,7 @@ const HomePage = () => {
           <Controller
             name='stampistID'
             control={control}
+            disabled={isProductAccepting}
             render={({ field }) => (
               <Select {...field} value={field.value ?? ''}>
                 <Select.Option value={''}>Выберите ваш ID</Select.Option>
@@ -64,6 +65,7 @@ const HomePage = () => {
           <Controller
             name='treadCode'
             control={control}
+            disabled={isProductAccepting}
             render={({ field }) => (
               <Select {...field} value={field.value ?? ''}>
                 <Select.Option value={''}>Выберите продукт</Select.Option>
@@ -78,6 +80,7 @@ const HomePage = () => {
           <Controller
             name='amount'
             control={control}
+            disabled={isProductAccepting}
             render={({ field }) => (
               <Input
                 {...field}
@@ -87,7 +90,9 @@ const HomePage = () => {
               />
             )}
           />
-          <Button onClick={handleSubmit(handleSaveProduct)} disabled={!formState.isValid}>
+          <Button
+            onClick={handleSubmit(handleSaveProduct)}
+            disabled={!formState.isValid || isProductAccepting}>
             Сохранить
           </Button>
         </form>

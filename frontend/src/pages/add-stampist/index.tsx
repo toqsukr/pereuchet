@@ -17,7 +17,7 @@ const StampistSchemaDTO = z.object({
 })
 
 const AddStampistPage = () => {
-  const { mutateAsync: addStampist } = useAddStampist()
+  const { mutateAsync: addStampist, isPending: isStampistAdding } = useAddStampist()
   const invalidateStampists = useInvalidateStampists()
   const { control, formState, reset, handleSubmit } = useForm({
     mode: 'onChange',
@@ -45,6 +45,7 @@ const AddStampistPage = () => {
           <Controller
             name='id'
             control={control}
+            disabled={isStampistAdding}
             render={({ field }) => (
               <Input
                 {...field}
@@ -57,9 +58,12 @@ const AddStampistPage = () => {
           <Controller
             name='name'
             control={control}
+            disabled={isStampistAdding}
             render={({ field }) => <Input {...field} value={field.value ?? ''} placeholder='Имя' />}
           />
-          <Button onClick={handleSubmit(handleSaveStampist)} disabled={!formState.isValid}>
+          <Button
+            onClick={handleSubmit(handleSaveStampist)}
+            disabled={!formState.isValid || isStampistAdding}>
             Сохранить
           </Button>
         </form>
